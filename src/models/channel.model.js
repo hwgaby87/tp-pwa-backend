@@ -1,5 +1,5 @@
-
 import mongoose from "mongoose";
+
 const channelSchema = new mongoose.Schema(
     {
         fk_id_workspace: {
@@ -27,5 +27,7 @@ const channelSchema = new mongoose.Schema(
         }
     }
 )
+
 const Channel = mongoose.model("Channel", channelSchema, "channels")
+
 export default Channel
