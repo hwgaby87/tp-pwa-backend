@@ -14,7 +14,7 @@ function authMiddleware(request, response, next) {
         const auth_token = auth_header.split(' ')[1]
 
         if (!auth_token) {
-            throw new ServerError('Token invalido', 401)
+            throw new ServerError('Token inválido', 401)
         }
 
         //Valido el token

@@ -27,7 +27,7 @@ class AuthController {
             const { email, password } = req.body;
             const auth_token = await authService.login({ email, password })
             return res.status(200).json({
-                message: "Login successful",
+                message: "Inicio de sesión exitoso",
                 status: 200,
                 ok: true,
                 data: {
@@ -46,7 +46,7 @@ class AuthController {
 
             await authService.verifyEmail({ verify_email_token })
 
-            response.status(200).send(`<h1>Mail verificado exitosamente</h1>`)
+            response.status(200).send(`<h1>Correo electrónico verificado exitosamente</h1>`)
         }
         catch (error) {
             next(error)

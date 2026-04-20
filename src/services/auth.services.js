@@ -63,10 +63,10 @@ class AuthService {
                 const { email, name } = jwt.decode(verify_email_token)
                 //Enviar otro mail de verificacion
                 await this.sendVerifyEmail({ email, name })
-                throw new ServerError('El token de verificacion expiro', 401)
+                throw new ServerError('El token de verificación expiró', 401)
             }
             else if (error instanceof jwt.JsonWebTokenError) {
-                throw new ServerError('Token invalido', 401)
+                throw new ServerError('Token inválido', 401)
             }
             else {
                 throw error
@@ -121,8 +121,8 @@ class AuthService {
                 html: `
                     <h1>Bienvenido ${name}</h1>
                     <p>Te has registrado correctamente, necesitamos verificar tu correo electronico</p>
-                    <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/verify-email?verify_email_token=${verify_email_token}`}">Click aqui para verificar</a>
-                    <span>Si no reconoces este registro desestima este mail.</span>
+                    <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/verify-email?verify_email_token=${verify_email_token}`}">Haz clic aquí para verificar</a>
+                    <span>Si no reconoces este registro, desestima este correo.</span>
                 `
             }
         )
@@ -156,8 +156,8 @@ class AuthService {
                 html: `
                     <h1> Restablecimiento de contraseña</h1>
                     <p>Has solicitado restablecer tu contraseña. Haz clic en el enlace para hacerlo</p>
-                    <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/reset-password/${reset_password_token}`}">Click aqui para restablecer</a>
-                    <span>Si no reconoces este registro, desestima este mail.</span>
+                    <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/reset-password/${reset_password_token}`}">Haz clic aquí para restablecer</a>
+                    <span>Si no reconoces este registro, desestima este correo.</span>
                 `
             })
         } catch (error) {
