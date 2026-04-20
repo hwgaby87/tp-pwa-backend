@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import available_invitation_responses from "../constants/invitation-responses.constants.js";
+import available_member_roles from "../constants/member-roles.constants.js";
 
 const workspaceMemberSchema = new mongoose.Schema({
     fk_id_user: {
@@ -13,11 +15,7 @@ const workspaceMemberSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: [
-            'owner',
-            'admin',
-            'user'
-        ],
+        enum: available_member_roles,
         default: "user"
     },
     created_at: {
@@ -27,11 +25,7 @@ const workspaceMemberSchema = new mongoose.Schema({
     },
     acceptInvitation: {
         type: String,
-        enum: [
-            'pending',
-            'accepted',
-            'rejected'
-        ],
+        enum: available_invitation_responses,
         default: 'pending'
     }
 })
