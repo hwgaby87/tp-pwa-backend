@@ -1,0 +1,31 @@
+
+import mongoose from "mongoose";
+const channelSchema = new mongoose.Schema(
+    {
+        fk_id_workspace: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Workspace',
+            required: true,
+        },
+        name: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+            required: false,
+        },
+        created_at: {
+            type: Date,
+            required: true,
+            default: Date.now,
+        },
+        is_active: {
+            type: Boolean,
+            required: true,
+            default: true
+        }
+    }
+)
+const Channel = mongoose.model("Channel", channelSchema, "channels")
+export default Channel
