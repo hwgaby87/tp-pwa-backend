@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/mongo-db.config.js';
+import authRouter from './routes/auth.routes.js';
 
 dotenv.config();
 
@@ -11,7 +12,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 // Rutas
+app.use('/api/auth', authRouter);
+
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'Servidor funcionando' });
 });
@@ -29,4 +33,3 @@ connectDB().then(() => {
         console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
 });
-
