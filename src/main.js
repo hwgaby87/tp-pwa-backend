@@ -29,3 +29,4 @@ connectDB().then(() => {
         console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
 });
+
