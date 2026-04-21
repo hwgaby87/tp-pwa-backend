@@ -8,16 +8,16 @@ import bcrypt from 'bcrypt'
 class AuthService {
     async register({ name, email, password }) {
         if (!name || !email || !password) {
-            throw new ServerError("Email, nombre de usuario y contraseña son obligatorios", 400);
+            throw new ServerError("Email, nombre de usuario y contraseña son obligatorios", 400);
         }
 
         const userByEmail = await userRepository.getByEmail(email);
         if (userByEmail) {
-            throw new ServerError('Email ya en uso!', 400)
+            throw new ServerError('El email ya está en uso', 400)
         }
         const userByUsername = await userRepository.getByUsername(name);
         if (userByUsername) {
-            throw new ServerError('Nombre de usuario ya en uso!', 400)
+            throw new ServerError('El nombre de usuario ya está en uso', 400)
         }
         const passwordHashed = await bcrypt.hash(password, 12)
         const userCreated = await userRepository.create(name, email, passwordHashed);
@@ -40,7 +40,7 @@ class AuthService {
                 throw new ServerError('El usuario no existe', 404)
             }
             else if (user.email_verified) {
-                throw new ServerError('Usuario con email ya validado', 400)
+                throw new ServerError('El email del usuario ya ha sido validado', 400)
             }
             else {
                 const user_updated = await userRepository.updateById(

@@ -1,4 +1,5 @@
 import User from "../models/user.model.js"
+import UserDTO from "../dto/user.dto.js"
 import ServerError from "../helpers/error.helper.js"
 
 class UserRepository {
@@ -30,7 +31,8 @@ class UserRepository {
 
     async getById(user_id) {
         try {
-            return await User.findById(user_id)
+            const user = await User.findById(user_id)
+            return user && new UserDTO(user)
         } catch (error) {
             throw new ServerError("Error al obtener el usuario", 500);
         }
@@ -43,7 +45,7 @@ class UserRepository {
                 new_user_props,
                 { returnDocument: 'after' }
             )
-            return new_user
+            return new_user && new UserDTO(new_user)
         } catch (error) {
             if (error.code === 11000) {
                 throw new ServerError("Los datos proporcionados ya están en uso por otro usuario", 400);
@@ -55,7 +57,7 @@ class UserRepository {
     async getByEmail(email) {
         try {
             const user = await User.findOne({ email: email })
-            return user
+            return user && new UserDTO(user)
         } catch (error) {
             throw new ServerError("Error al buscar usuario por email", 500);
         }
@@ -64,7 +66,7 @@ class UserRepository {
     async getUser() {
         try {
             const user = await User.findOne()
-            return user
+            return user && new UserDTO(user)
         } catch (error) {
             throw new ServerError("Error al obtener usuario", 500);
         }
@@ -73,7 +75,7 @@ class UserRepository {
     async getByUsername(name) {
         try {
             const user = await User.findOne({ name: name })
-            return user
+            return user && new UserDTO(user)
         } catch (error) {
             throw new ServerError("Error al buscar usuario por nombre", 500);
         }

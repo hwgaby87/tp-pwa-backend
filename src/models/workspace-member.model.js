@@ -15,7 +15,7 @@ const workspaceMemberSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: available_member_roles,
+        enum: Object.values(available_member_roles),
         default: "user"
     },
     created_at: {
@@ -25,7 +25,7 @@ const workspaceMemberSchema = new mongoose.Schema({
     },
     acceptInvitation: {
         type: String,
-        enum: available_invitation_responses,
+        enum: Object.values(available_invitation_responses),
         default: 'pending'
     }
 })
