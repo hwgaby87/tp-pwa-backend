@@ -5,6 +5,7 @@ import connectDB from './config/mongo-db.config.js';
 import authRouter from './routes/auth.routes.js';
 import workspaceRouter from './routes/workspace.routes.js';
 import healthRouter from './routes/health.routes.js';
+import userRouter from './routes/user.routes.js';
 import errorHandlerMiddleware from './middlewares/error-handler.middleware.js';
 
 dotenv.config();
@@ -20,20 +21,17 @@ app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/workspace', workspaceRouter);
 app.use('/api/health', healthRouter);
-
-app.get('/api/health-check', (req, res) => {
-    res.json({ status: 'ok', message: 'Servidor funcionando' });
-});
+app.use('/api/users', userRouter);
 
 // Ruta no encontrada
 app.use((req, res) => {
-    res.status(404).json({ success: false, message: 'Ruta no encontrada' });
+    res.status(404).json({ ok: false, status: 404, message: 'Ruta no encontrada' });
 });
 
 // Middleware de manejo de errores
 app.use(errorHandlerMiddleware);
 
-// Arranque
+// Arranque del servidor
 const PORT = process.env.PORT || 8080;
 
 connectDB().then(() => {

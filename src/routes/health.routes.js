@@ -5,7 +5,7 @@ const healthRouter = express.Router()
 
 healthRouter.get(
     '/',
-    healthController.getApi
+    healthController.getDB
 )
 
 healthRouter.get(

@@ -38,6 +38,15 @@ class UserRepository {
         }
     }
 
+    async getAll() {
+        try {
+            const users = await User.find({}, '-password')
+            return users.map(user => new UserDTO(user))
+        } catch (error) {
+            throw new ServerError("Error al obtener los usuarios", 500);
+        }
+    }
+
     async updateById(id, new_user_props) {
         try {
             const new_user = await User.findByIdAndUpdate(
