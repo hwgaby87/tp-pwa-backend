@@ -1,6 +1,7 @@
 import workspaceMemberRepository from "../repository/member.repository.js"
 import memberWorkspaceService from "../services/member-workspace.services.js"
 import workspaceService from "../services/workspace.services.js"
+import ServerError from "../helpers/error.helper.js"
 
 class WorkspaceController {
     async getWorkspaces(request, response, next) {
@@ -82,6 +83,31 @@ class WorkspaceController {
         }
     }
 
+    async update(request, response, next) {
+        const workspace_id = request.params.workspace_id || request.body.workspace_id
+        const { title, description } = request.body
+        try {
+            if (!workspace_id) {
+                throw new ServerError('El ID del espacio de trabajo es requerido', 400)
+            }
+            const user = request.user
+            const member = await workspaceMemberRepository.isMemberPartOfWorkspaceById(user.id, workspace_id)
+            const memberRole = member?.role || member?.workspace_member_role
+            if (!member || !['admin', 'owner'].includes(memberRole)) {
+                throw new ServerError('No tienes permisos para actualizar este espacio de trabajo', 403)
+            }
+            const workspace = await workspaceService.update(workspace_id, title, description)
+            response.json({
+                ok: true,
+                status: 200,
+                message: 'Espacio de trabajo actualizado',
+                data: { workspace }
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async respondToInvitation(req, res, next) {
         const { token } = req.query
         try {
@@ -91,6 +117,20 @@ class WorkspaceController {
                 status: 200,
                 message: `Invitación ${result.acceptInvitation} con éxito`,
                 data: result
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async delete(req, res, next) {
+        const { workspace_id } = req.params 
+        try {
+            await workspaceService.deleteWorkspaceById(workspace_id)
+            res.status(200).json({
+                ok: true,
+                status: 200,
+                message: 'Espacio de trabajo eliminado con éxito'
             })
         } catch (error) {
             next(error)

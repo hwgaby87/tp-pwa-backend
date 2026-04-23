@@ -76,8 +76,9 @@ class WorkspaceMemberRepository {
             const members = await WorkspaceMember.find({ fk_id_workspace: fk_id_workspace })
                 .populate('fk_id_user', 'name email')
 
-            const members_mapped = members.map(
-                (member) => {
+            const members_mapped = members
+                .filter(member => member.fk_id_user)
+                .map((member) => {
                     return {
                         member_id: member._id,
                         member_role: member.role,
@@ -87,8 +88,7 @@ class WorkspaceMemberRepository {
                         user_name: member.fk_id_user.name,
                         user_email: member.fk_id_user.email
                     }
-                }
-            )
+                })
             return members_mapped
         } catch (error) {
             throw new ServerError("Error al obtener la lista de miembros del espacio", 500);
@@ -100,8 +100,9 @@ class WorkspaceMemberRepository {
             const members = await WorkspaceMember.find({ fk_id_user: user_id })
                 .populate('fk_id_workspace')
 
-            const members_mapped = members.map(
-                (member) => {
+            const members_mapped = members
+                .filter(member => member.fk_id_workspace)
+                .map((member) => {
                     return {
                         member_id: member._id,
                         member_role: member.role,
@@ -111,8 +112,7 @@ class WorkspaceMemberRepository {
                         workspace_title: member.fk_id_workspace.title,
                         workspace_description: member.fk_id_workspace.description
                     }
-                }
-            )
+                })
 
             return members_mapped
         } catch (error) {

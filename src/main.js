@@ -16,15 +16,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Log all incoming requests
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+    next();
+});
 
 // Rutas
 app.use('/api/auth', authRouter);
-app.use('/api/workspace', workspaceRouter);
+app.use('/api/workspaces', workspaceRouter);
 app.use('/api/health', healthRouter);
 app.use('/api/users', userRouter);
 
 // Ruta no encontrada
 app.use((req, res) => {
+    console.log(`[404] No route matched for: ${req.method} ${req.path}`);
     res.status(404).json({ ok: false, status: 404, message: 'Ruta no encontrada' });
 });
 

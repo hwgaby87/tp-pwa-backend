@@ -24,7 +24,8 @@ function verifyMemberWorkspaceRoleMiddleware(valid_roles = []) {
                     ok: false
                 })
             }
-            if (valid_roles.length >= 1 && !valid_roles.includes(member.role)) {
+            const memberRole = member.role || member.workspace_member_role
+            if (valid_roles.length >= 1 && !valid_roles.includes(memberRole)) {
                 throw new ServerError('Rol no válido', 403)
             }
 

@@ -7,14 +7,17 @@ function authMiddleware(request, response, next) {
         //El token se envía en el header de autorización con el formato "Bearer <token>"
         const auth_header = request.headers.authorization
         if (!auth_header) {
-            throw new ServerError('Token faltante', 401)
+            throw new ServerError('Token requerido', 401)
         }
 
-        //Extraigo del header el token
-        const auth_token = auth_header.split(' ')[1]
+        const auth_header_parts = auth_header.split(' ')
+        if (auth_header_parts.length !== 2 || auth_header_parts[0] !== 'Bearer') {
+            throw new ServerError('Token ausente o mal formado', 401)
+        }
 
+        const auth_token = auth_header_parts[1]
         if (!auth_token) {
-            throw new ServerError('Token inválido', 401)
+            throw new ServerError('Token ausente', 401)
         }
 
         //Valido el token
