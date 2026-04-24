@@ -37,7 +37,7 @@ memberWorkspaceRouter.put(
     memberController.updateMember
 )
 
-memberRouter.delete(
+memberWorkspaceRouter.delete(
     '/:memberId',
     verifyMemberWorkspaceRoleMiddleware(
         [available_member_roles.OWNER, available_member_roles.ADMIN]
@@ -45,4 +45,4 @@ memberRouter.delete(
     memberController.removeMember
 )
 
-export default memberRouter
+export default memberWorkspaceRouter
