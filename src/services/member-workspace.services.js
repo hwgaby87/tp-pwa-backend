@@ -18,7 +18,7 @@ class MemberWorkspaceService {
         const result = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, user_id)
 
         if (result) {
-            throw new ServerError('Este miembro ya existe')
+            throw new ServerError('El usuario ya es miembro de este espacio de trabajo')
         }
 
         // Validar que el rol sea uno de los roles disponibles
@@ -86,65 +86,65 @@ class MemberWorkspaceService {
     async inviteMember(workspace_id, invited_email, role) {
         if (!workspace_id || !invited_email || !role) {
             throw new ServerError('Todos los campos son obligatorios', 400)
-        }
 
-        const invitedUser = await userRepository.getByEmail(invited_email)
-        if (!invitedUser) {
-            throw new ServerError('El usuario invitado no existe', 404)
-        }
-
-        const existingMember = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, invitedUser._id)
-        if (existingMember) {
-            if (existingMember.acceptInvitation === 'pending') {
-                throw new ServerError('Ya hay una invitación pendiente para este usuario', 400)
+            const invitedUser = await userRepository.getByEmail(invited_email)
+            if (!invitedUser) {
+                throw new ServerError('El usuario invitado no existe', 404)
             }
-            throw new ServerError('El usuario ya es miembro de este espacio de trabajo', 400)
-        }
 
-        const newMember = await workspaceMemberRepository.create(workspace_id, invitedUser._id, role)
+            const existingMember = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, invitedUser._id)
+            if (existingMember) {
+                if (existingMember.acceptInvitation === 'pending') {
+                    throw new ServerError('Ya hay una invitación pendiente para este usuario', 400)
+                }
+                throw new ServerError('El usuario ya es miembro de este espacio de trabajo', 400)
+            }
 
-        const accept_token = jwt.sign(
-            {
-                email: invited_email,
-                workspace_id,
-                action: 'accepted'
-            },
-            ENVIRONMENT.JWT_SECRET_KEY,
-            { expiresIn: '7d' }
-        )
+            const newMember = await workspaceMemberRepository.create(workspace_id, invitedUser._id, role)
 
-        const reject_token = jwt.sign(
-            {
-                email: invited_email,
-                workspace_id,
-                action: 'rejected'
-            },
-            ENVIRONMENT.JWT_SECRET_KEY,
-            { expiresIn: '7d' }
-        )
+            const accept_token = jwt.sign(
+                {
+                    email: invited_email,
+                    workspace_id,
+                    action: 'accepted'
+                },
+                ENVIRONMENT.JWT_SECRET_KEY,
+                { expiresIn: '7d' }
+            )
 
-        const accept_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${accept_token}`
-        const reject_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${reject_token}`
+            const reject_token = jwt.sign(
+                {
+                    email: invited_email,
+                    workspace_id,
+                    action: 'rejected'
+                },
+                ENVIRONMENT.JWT_SECRET_KEY,
+                { expiresIn: '7d' }
+            )
 
-        await mailerTransporter.sendMail({
-            from: ENVIRONMENT.MAIL_USER,
-            to: invited_email,
-            subject: `Invitación a unirse al espacio de trabajo`,
-            html: `
+            const accept_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${accept_token}`
+            const reject_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${reject_token}`
+
+            await mailerTransporter.sendMail({
+                from: ENVIRONMENT.MAIL_USER,
+                to: invited_email,
+                subject: `Invitación a unirse al espacio de trabajo`,
+                html: `
                 <h1>Has sido invitado a un espacio de trabajo</h1>
                 <p>Haz clic en uno de los siguientes enlaces para aceptar o rechazar la invitación:</p>
                 <a href="${accept_link}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Aceptar Invitación</a>
                 <br/><br/>
                 <a href="${reject_link}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Rechazar Invitación</a>
             `
-        })
+            })
 
-        return newMember
+            return newMember
+        }
     }
 
     async respondToInvitation(token) {
         if (!token) {
-            throw new ServerError('Token no proporcionado', 400)
+            throw new ServerError('El token no se ha proporcionado', 400)
         }
 
         try {
@@ -152,12 +152,12 @@ class MemberWorkspaceService {
 
             const user = await userRepository.getByEmail(email)
             if (!user) {
-                throw new ServerError('Usuario no encontrado', 404)
+                throw new ServerError('El usuario no existe', 404)
             }
 
             const membership = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, user._id)
             if (!membership) {
-                throw new ServerError('Invitación no encontrada', 404)
+                throw new ServerError('La invitación no existe', 404)
             }
 
             if (membership.acceptInvitation !== 'pending') {

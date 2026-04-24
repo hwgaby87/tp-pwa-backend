@@ -27,7 +27,7 @@ class AuthService {
 
     async verifyEmail({ verify_email_token }) {
         if (!verify_email_token) {
-            throw new ServerError('No se encuentra el token', 400)
+            throw new ServerError('El token no se ha proporcionado', 400)
         }
 
         //Método de verificación de JWT. Este método es para verificar el token.
@@ -48,7 +48,7 @@ class AuthService {
                     { email_verified: true }
                 )
                 if (!user_updated.email_verified) {
-                    throw new ServerError('Usuario no se pudo actualizar', 400)
+                    throw new ServerError('El usuario no se pudo actualizar', 400)
                 }
                 else {
                     return user_updated
@@ -117,10 +117,10 @@ class AuthService {
             {
                 from: ENVIRONMENT.MAIL_USER,
                 to: email,
-                subject: `Bienvenido ${name} verifica tu correo electronico`,
+                subject: `Bienvenido ${name} verifica tu correo electrónico`,
                 html: `
                     <h1>Bienvenido ${name}</h1>
-                    <p>Te has registrado correctamente, necesitamos verificar tu correo electronico</p>
+                    <p>Te has registrado correctamente, necesitamos verificar tu correo electrónico</p>
                     <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/verify-email?verify_email_token=${verify_email_token}`}">Haz clic aquí para verificar</a>
                     <span>Si no reconoces este registro, desestima este correo.</span>
                 `

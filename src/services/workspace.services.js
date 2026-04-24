@@ -17,7 +17,7 @@ class WorkspaceService {
     }
     async getOne(workspace_id) {
         if (!workspace_id) {
-            throw new ServerError("Debe proporcionar un ID", 400)
+            throw new ServerError("El ID del espacio de trabajo es obligatorio", 400)
         }
 
         try {
@@ -35,7 +35,7 @@ class WorkspaceService {
 
     async update(workspace_id, title, description) {
         if (!workspace_id) {
-            throw new ServerError("Debe proporcionar un ID", 400)
+            throw new ServerError("El ID del espacio de trabajo es obligatorio", 400)
         }
         if (!title && !description) {
             throw new ServerError("Debe proporcionar al menos un campo para actualizar", 400)
@@ -58,12 +58,12 @@ class WorkspaceService {
 
     async deleteWorkspaceById(workspace_id) {
             if (!workspace_id) {
-                throw new ServerError("ID de espacio de trabajo es requerido", 400);
+                throw new ServerError("El ID del espacio de trabajo es obligatorio", 400);
             }
             try {
                 const workspace = await workspaceRepository.getById(workspace_id);
                 if (!workspace) {
-                    throw new ServerError("Espacio de trabajo no encontrado", 404);
+                    throw new ServerError("El espacio de trabajo no existe", 404);
                 }
                 await workspaceRepository.deleteById(workspace_id);
                 return { message: "Espacio de trabajo eliminado exitosamente" };

@@ -1,6 +1,6 @@
 import memberWorkspaceService from "../services/member-workspace.services.js"
 
-class MemberController {
+class WorkspaceMemberController {
     async inviteMember(req, res, next) {
         const { workspace_id } = req.params
         const { email, role } = req.body
@@ -97,6 +97,6 @@ class MemberController {
     }
 }
 
-const memberController = new MemberController()
+const workspaceMemberController = new WorkspaceMemberController()
 
-export default memberController
+export default workspaceMemberController

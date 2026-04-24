@@ -12,12 +12,12 @@ class UserService {
 
     async getUserById(userId) {
         if (!userId) {
-            throw new ServerError("ID de usuario es requerido", 400);
+            throw new ServerError("El ID del usuario es obligatorio", 400);
         }
         try {
             const user = await userRepository.getById(userId);
             if (!user) {
-                throw new ServerError("Usuario no encontrado", 404);
+                throw new ServerError("El usuario no existe", 404);
             }
             return user;
         } catch (error) {
@@ -28,12 +28,12 @@ class UserService {
 
     async deleteUserById(userId) {
         if (!userId) {
-            throw new ServerError("ID de usuario es requerido", 400);
+            throw new ServerError("El ID del usuario es obligatorio", 400);
         }
         try {
             const user = await userRepository.getById(userId);
             if (!user) {
-                throw new ServerError("Usuario no encontrado", 404);
+                throw new ServerError("El usuario no existe", 404);
             }
             await userRepository.deleteById(userId);
             return { message: "Usuario eliminado exitosamente" };
@@ -45,7 +45,7 @@ class UserService {
 
     async updateUserById(userId, newUserProps) {
         if (!userId) {
-            throw new ServerError("ID de usuario es requerido", 400);
+            throw new ServerError("El ID del usuario es obligatorio", 400);
         }
         if (!newUserProps || Object.keys(newUserProps).length === 0) {
             throw new ServerError("No se proporcionaron datos para actualizar", 400);
@@ -53,11 +53,11 @@ class UserService {
         try {
             const user = await userRepository.getById(userId);
             if (!user) {
-                throw new ServerError("Usuario no encontrado", 404);
+                throw new ServerError("El usuario no existe", 404);
             }
             const updatedUser = await userRepository.updateById(userId, newUserProps);
             if (!updatedUser) {
-                throw new ServerError("Usuario no encontrado", 404);
+                throw new ServerError("El usuario no existe", 404);
             }
             return updatedUser;
         } catch (error) {

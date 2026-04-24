@@ -1,5 +1,5 @@
 import express from 'express'
-import memberController from '../controllers/member.controller.js'
+import workspaceMemberController from '../controllers/workspace-member.controller.js'
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
 import available_member_roles from '../constants/member-roles.constants.js'
 import authmiddleware from '../middlewares/auth.middleware.js'
@@ -14,19 +14,19 @@ memberWorkspaceRouter.post(
     verifyMemberWorkspaceRoleMiddleware(
         [available_member_roles.OWNER, available_member_roles.ADMIN]
     ),
-    memberController.inviteMember
+    workspaceMemberController.inviteMember
 )
 
 memberWorkspaceRouter.get(
     '/',
     verifyMemberWorkspaceRoleMiddleware([]),
-    memberController.getMembers
+    workspaceMemberController.getMembers
 )
 
 memberWorkspaceRouter.get(
     '/:memberId',
     verifyMemberWorkspaceRoleMiddleware([]),
-    memberController.getMemberById
+    workspaceMemberController.getMemberById
 )
 
 memberWorkspaceRouter.put(
@@ -34,7 +34,7 @@ memberWorkspaceRouter.put(
     verifyMemberWorkspaceRoleMiddleware(
         [available_member_roles.OWNER, available_member_roles.ADMIN]
     ),
-    memberController.updateMember
+    workspaceMemberController.updateMember
 )
 
 memberWorkspaceRouter.delete(
@@ -42,7 +42,7 @@ memberWorkspaceRouter.delete(
     verifyMemberWorkspaceRoleMiddleware(
         [available_member_roles.OWNER, available_member_roles.ADMIN]
     ),
-    memberController.removeMember
+    workspaceMemberController.removeMember
 )
 
 export default memberWorkspaceRouter
