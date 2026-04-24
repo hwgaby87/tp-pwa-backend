@@ -4,6 +4,8 @@ import userRepository from "../repository/user.repository.js"
 import jwt from 'jsonwebtoken'
 import ENVIRONMENT from "../config/environment.config.js"
 import mailerTransporter from "../config/mailer.config.js"
+import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constants.js"
+
 
 class MemberWorkspaceService {
     async getWorkspaces(user_id) {
@@ -15,8 +17,13 @@ class MemberWorkspaceService {
         //Checkear que no exista un membresia para ese usuario
         const result = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, user_id)
 
-        if(result){
+        if (result) {
             throw new ServerError('Este miembro ya existe')
+        }
+
+        // Validar que el rol sea uno de los roles disponibles
+        if (!Object.values(AVAILABLE_MEMBER_ROLES).includes(role)) {
+            throw new ServerError("Rol no válido", 400)
         }
 
         await workspaceMemberRepository.create(workspace_id, user_id, role)
@@ -31,6 +38,46 @@ class MemberWorkspaceService {
             return await workspaceMemberRepository.getMemberList(
                 workspace_id
             )
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getMemberById(member_id) {
+        try {
+            if (!member_id) {
+                throw new ServerError("El ID del miembro es obligatorio", 400)
+            }
+            return await workspaceMemberRepository.getById(member_id)
+        } catch (error) {
+            throw error
+        }
+    }
+
+
+    async updateMember(member_id, role) {
+        try {
+            if (!member_id || !role) {
+                throw new ServerError("Todos los campos son obligatorios", 400)
+            }
+
+            // Validar que el rol sea uno de los roles disponibles
+            if (!Object.values(AVAILABLE_MEMBER_ROLES).includes(role)) {
+                throw new ServerError("Rol no válido", 400)
+            }
+
+            return await workspaceMemberRepository.updateRoleById(member_id, role)
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async removeMember(member_id) {
+        try {
+            if (!member_id) {
+                throw new ServerError("El ID del miembro es obligatorio", 400)
+            }
+            return await workspaceMemberRepository.deleteById(member_id)
         } catch (error) {
             throw error
         }

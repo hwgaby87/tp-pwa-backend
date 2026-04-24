@@ -68,21 +68,6 @@ class WorkspaceController {
             next(error)
         }
     }
-    async inviteMember(req, res, next) {
-        const { workspace_id } = req.params
-        const { email, role } = req.body
-        try {
-            await memberWorkspaceService.inviteMember(workspace_id, email, role)
-            res.status(201).json({
-                ok: true,
-                status: 201,
-                message: 'Invitación enviada con éxito'
-            })
-        } catch (error) {
-            next(error)
-        }
-    }
-
     async update(request, response, next) {
         const workspace_id = request.params.workspace_id || request.body.workspace_id
         const { title, description } = request.body

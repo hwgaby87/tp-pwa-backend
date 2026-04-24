@@ -3,6 +3,7 @@ import workspaceController from '../controllers/workspace.controller.js'
 import authMiddleware from '../middlewares/auth.middleware.js'
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
 import channelRouter from './channel.routes.js'
+import memberRouter from './member.routes.js'
 
 const workspaceRouter = Router()
 
@@ -30,11 +31,6 @@ workspaceRouter.get(
     workspaceController.getById
 )
 
-workspaceRouter.post(
-    '/:workspace_id/member/invite',
-    verifyMemberWorkspaceRoleMiddleware(['admin', 'owner']),
-    workspaceController.inviteMember
-)
 
 workspaceRouter.put(
     '/',
@@ -58,5 +54,9 @@ workspaceRouter.use(
     channelRouter
 )
 
+workspaceRouter.use(
+    '/:workspace_id/members',
+    memberRouter
+)
 
 export default workspaceRouter
