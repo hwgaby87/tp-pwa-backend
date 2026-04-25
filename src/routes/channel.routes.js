@@ -4,6 +4,8 @@ import verifyWorkspaceMiddleware from '../middlewares/verify-workspace.middlewar
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
 import verifyChannelMiddleware from '../middlewares/verify-channel.middleware.js'
 import available_member_roles from '../constants/member-roles.constants.js'
+import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
+import { validateChannelCreate, validateChannelUpdate, validateChannelDelete } from '../middlewares/validators/channel.validator.js'
 
 const channelRouter = express.Router({ mergeParams: true })
 
@@ -15,6 +17,8 @@ channelRouter.post(
         [available_member_roles.OWNER],
         [available_member_roles.ADMIN]
     ),
+    validateChannelCreate,
+    handleValidationErrors,
     channelController.create
 )
 
@@ -27,8 +31,11 @@ channelRouter.get(
 channelRouter.delete(
     '/:channel_id',
     verifyMemberWorkspaceRoleMiddleware(
-        [available_member_roles.OWNER]
+        [available_member_roles.OWNER],
+        [available_member_roles.ADMIN]
     ),
+    validateChannelDelete,
+    handleValidationErrors,
     verifyChannelMiddleware,
     channelController.delete
 )
@@ -39,6 +46,8 @@ channelRouter.put(
         [available_member_roles.OWNER],
         [available_member_roles.ADMIN]
     ),
+    validateChannelUpdate,
+    handleValidationErrors,
     verifyChannelMiddleware,
     channelController.update
 )

@@ -1,5 +1,6 @@
 import userRepository from "../repository/user.repository.js";
 import authService from "../services/auth.services.js";
+import { getSuccessHTML, getErrorHTML } from "../helpers/html-response.helper.js";
 
 class AuthController {
     async register(req, res, next) {
@@ -46,10 +47,19 @@ class AuthController {
 
             await authService.verifyEmail({ verify_email_token })
 
-            response.status(200).send(`<h1>Correo electrónico verificado exitosamente</h1>`)
+            const htmlResponse = getSuccessHTML(
+                "¡Correo verificado!",
+                "Tu correo electrónico ha sido verificado con éxito. Ya puedes cerrar esta pestaña o volver a la aplicación para iniciar sesión."
+            );
+
+            response.status(200).send(htmlResponse)
         }
         catch (error) {
-            next(error)
+            const htmlResponse = getErrorHTML(
+                "Error de verificación",
+                error.message || "No se pudo verificar tu correo electrónico. Es posible que el enlace haya expirado o sea inválido."
+            );
+            response.status(error.status || 500).send(htmlResponse)
         }
 
     }

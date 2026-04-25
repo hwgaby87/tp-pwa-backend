@@ -3,6 +3,8 @@ import workspaceMemberController from '../controllers/workspace-member.controlle
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
 import available_member_roles from '../constants/member-roles.constants.js'
 import authmiddleware from '../middlewares/auth.middleware.js'
+import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
+import { validateInviteMember, validateUpdateMember, validateRemoveMember } from '../middlewares/validators/member.validator.js'
 
 const memberWorkspaceRouter = express.Router({ mergeParams: true })
 
@@ -14,6 +16,8 @@ memberWorkspaceRouter.post(
     verifyMemberWorkspaceRoleMiddleware(
         [available_member_roles.OWNER, available_member_roles.ADMIN]
     ),
+    validateInviteMember,
+    handleValidationErrors,
     workspaceMemberController.inviteMember
 )
 
@@ -34,6 +38,8 @@ memberWorkspaceRouter.put(
     verifyMemberWorkspaceRoleMiddleware(
         [available_member_roles.OWNER, available_member_roles.ADMIN]
     ),
+    validateUpdateMember,
+    handleValidationErrors,
     workspaceMemberController.updateMember
 )
 
@@ -42,6 +48,8 @@ memberWorkspaceRouter.delete(
     verifyMemberWorkspaceRoleMiddleware(
         [available_member_roles.OWNER, available_member_roles.ADMIN]
     ),
+    validateRemoveMember,
+    handleValidationErrors,
     workspaceMemberController.removeMember
 )
 

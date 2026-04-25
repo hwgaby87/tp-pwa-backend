@@ -90,10 +90,19 @@ class ChannelRepository {
         // Normalizo el canal
         const normalized_channel = channel && new ChannelDTO(channel)
         return normalized_channel
-    } catch (error) {
-        throw new ServerError("Error al actualizar el canal", 500);
+        } catch (error) {
+            throw new ServerError("Error al actualizar el canal", 500);
+        }
     }
-}
+
+    async findByNameAndWorkspace(name, workspace_id) {
+        try {
+            const channel = await ChannelModel.findOne({ name, fk_id_workspace: workspace_id, is_active: true })
+            return channel && new ChannelDTO(channel)
+        } catch (error) {
+            throw new ServerError("Error al buscar el canal por nombre", 500);
+        }
+    }
 }
 
 const channelRepository = new ChannelRepository()

@@ -28,6 +28,8 @@ const channelSchema = new mongoose.Schema(
     }
 )
 
+channelSchema.index({ fk_id_workspace: 1, name: 1 }, { unique: true })
+
 const Channel = mongoose.model("Channel", channelSchema, "channels")
 
 export default Channel

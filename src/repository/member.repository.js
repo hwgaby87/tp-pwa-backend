@@ -3,12 +3,13 @@ import WorkspaceMemberDTO from "../dto/workspace-member.dto.js"
 import ServerError from "../helpers/error.helper.js"
 
 class WorkspaceMemberRepository {
-    async create(fk_id_workspace, fk_id_user, role) {
+    async create(fk_id_workspace, fk_id_user, role, acceptInvitation) {
         try {
             const member = await WorkspaceMember.create({
                 fk_id_workspace,
                 fk_id_user,
-                role
+                role,
+                acceptInvitation: acceptInvitation || 'pending'
             })
             return new WorkspaceMemberDTO(member)
         } catch (error) {
@@ -38,10 +39,12 @@ class WorkspaceMemberRepository {
                 member_id: member._id,
                 member_role: member.role,
                 member_created_at: member.created_at,
+                workspace_id: member.fk_id_workspace,
 
                 user_id: member.fk_id_user._id,
                 user_name: member.fk_id_user.name,
-                user_email: member.fk_id_user.email
+                user_email: member.fk_id_user.email,
+                invitation_status: member.acceptInvitation
             }
         } catch (error) {
             throw new ServerError("Error al obtener el miembro", 500);
@@ -98,7 +101,8 @@ class WorkspaceMemberRepository {
 
                         user_id: member.fk_id_user._id,
                         user_name: member.fk_id_user.name,
-                        user_email: member.fk_id_user.email
+                        user_email: member.fk_id_user.email,
+                        invitation_status: member.acceptInvitation
                     }
                 })
             return members_mapped
@@ -150,6 +154,14 @@ class WorkspaceMemberRepository {
             return member && new WorkspaceMemberDTO(member);
         } catch (error) {
             throw new ServerError("Error al verificar la pertenencia al espacio", 500);
+        }
+    }
+
+    async countMembersByWorkspaceId(workspace_id) {
+        try {
+            return await WorkspaceMember.countDocuments({ fk_id_workspace: workspace_id })
+        } catch (error) {
+            throw new ServerError("Error al contar los miembros del espacio", 500);
         }
     }
 }

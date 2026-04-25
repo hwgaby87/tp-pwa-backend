@@ -13,7 +13,7 @@ class MemberWorkspaceService {
         const workspacesList = await workspaceMemberRepository.getWorkspaceListByUserId(user_id)
         return workspacesList
     }
-    async create(user_id, workspace_id, role) {
+    async create(user_id, workspace_id, role, acceptInvitation) {
         //Checkear que no exista un membresia para ese usuario
         const result = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, user_id)
 
@@ -26,7 +26,7 @@ class MemberWorkspaceService {
             throw new ServerError("Rol no válido", 400)
         }
 
-        await workspaceMemberRepository.create(workspace_id, user_id, role)
+        await workspaceMemberRepository.create(workspace_id, user_id, role, acceptInvitation)
     }
 
     async getMemberList(workspace_id) {
@@ -81,6 +81,17 @@ class MemberWorkspaceService {
             if (!member_id) {
                 throw new ServerError("El ID del miembro es obligatorio", 400)
             }
+
+            const member = await workspaceMemberRepository.getById(member_id)
+            if (!member) {
+                throw new ServerError("El miembro no existe", 404)
+            }
+
+            const membersCount = await workspaceMemberRepository.countMembersByWorkspaceId(member.workspace_id)
+            if (membersCount <= 1) {
+                throw new ServerError("No se puede eliminar al último miembro del espacio de trabajo", 400)
+            }
+
             return await workspaceMemberRepository.deleteById(member_id)
         } catch (error) {
             throw error
@@ -90,60 +101,60 @@ class MemberWorkspaceService {
     async inviteMember(workspace_id, invited_email, role) {
         if (!workspace_id || !invited_email || !role) {
             throw new ServerError('Todos los campos son obligatorios', 400)
-
-            const invitedUser = await userRepository.getByEmail(invited_email)
-            if (!invitedUser) {
-                throw new ServerError('El usuario invitado no existe', 404)
-            }
-
-            const existingMember = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, invitedUser._id)
-            if (existingMember) {
-                if (existingMember.acceptInvitation === 'pending') {
-                    throw new ServerError('Ya hay una invitación pendiente para este usuario', 400)
-                }
-                throw new ServerError('El usuario ya es miembro de este espacio de trabajo', 400)
-            }
-
-            const newMember = await workspaceMemberRepository.create(workspace_id, invitedUser._id, role)
-
-            const accept_token = jwt.sign(
-                {
-                    email: invited_email,
-                    workspace_id,
-                    action: 'accepted'
-                },
-                ENVIRONMENT.JWT_SECRET_KEY,
-                { expiresIn: '7d' }
-            )
-
-            const reject_token = jwt.sign(
-                {
-                    email: invited_email,
-                    workspace_id,
-                    action: 'rejected'
-                },
-                ENVIRONMENT.JWT_SECRET_KEY,
-                { expiresIn: '7d' }
-            )
-
-            const accept_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${accept_token}`
-            const reject_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${reject_token}`
-
-            await mailerTransporter.sendMail({
-                from: ENVIRONMENT.MAIL_USER,
-                to: invited_email,
-                subject: `Invitación a unirse al espacio de trabajo`,
-                html: `
-                <h1>Has sido invitado a un espacio de trabajo</h1>
-                <p>Haz clic en uno de los siguientes enlaces para aceptar o rechazar la invitación:</p>
-                <a href="${accept_link}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Aceptar Invitación</a>
-                <br/><br/>
-                <a href="${reject_link}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Rechazar Invitación</a>
-            `
-            })
-
-            return newMember
         }
+
+        const invitedUser = await userRepository.getByEmail(invited_email)
+        if (!invitedUser) {
+            throw new ServerError('El usuario invitado no existe', 404)
+        }
+
+        const existingMember = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, invitedUser._id)
+        if (existingMember) {
+            if (existingMember.acceptInvitation === 'pending') {
+                throw new ServerError('Ya hay una invitación pendiente para este usuario', 400)
+            }
+            throw new ServerError('El usuario ya es miembro de este espacio de trabajo', 400)
+        }
+
+        const newMember = await workspaceMemberRepository.create(workspace_id, invitedUser._id, role)
+
+        const accept_token = jwt.sign(
+            {
+                email: invited_email,
+                workspace_id,
+                action: 'accepted'
+            },
+            ENVIRONMENT.JWT_SECRET_KEY,
+            { expiresIn: '7d' }
+        )
+
+        const reject_token = jwt.sign(
+            {
+                email: invited_email,
+                workspace_id,
+                action: 'rejected'
+            },
+            ENVIRONMENT.JWT_SECRET_KEY,
+            { expiresIn: '7d' }
+        )
+
+        const accept_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${accept_token}`
+        const reject_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${reject_token}`
+
+        await mailerTransporter.sendMail({
+            from: ENVIRONMENT.MAIL_USER,
+            to: invited_email,
+            subject: `Invitación a unirse al espacio de trabajo`,
+            html: `
+            <h1>Has sido invitado a un espacio de trabajo</h1>
+            <p>Haz clic en uno de los siguientes enlaces para aceptar o rechazar la invitación:</p>
+            <a href="${accept_link}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Aceptar Invitación</a>
+            <br/><br/>
+            <a href="${reject_link}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Rechazar Invitación</a>
+        `
+        })
+
+        return newMember
     }
 
     async respondToInvitation(token) {

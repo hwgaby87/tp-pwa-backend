@@ -1,4 +1,5 @@
 import userRepository from "../repository/user.repository.js";
+import workspaceMemberRepository from "../repository/member.repository.js";
 import ServerError from "../helpers/error.helper.js";
 
 class UserService {
@@ -35,6 +36,17 @@ class UserService {
             if (!user) {
                 throw new ServerError("El usuario no existe", 404);
             }
+
+            // Verificar si el usuario es el único miembro en alguno de sus workspaces
+            const userWorkspaces = await workspaceMemberRepository.getWorkspaceListByUserId(userId);
+            
+            for (const ws of userWorkspaces) {
+                const membersCount = await workspaceMemberRepository.countMembersByWorkspaceId(ws.workspace_id);
+                if (membersCount <= 1) {
+                    throw new ServerError(`No se puede eliminar al usuario porque es el único miembro del espacio "${ws.workspace_title}". Debe invitar a alguien más o eliminar el espacio primero.`, 400);
+                }
+            }
+
             await userRepository.deleteById(userId);
             return { message: "Usuario eliminado exitosamente" };
         } catch (error) {
