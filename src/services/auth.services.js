@@ -156,7 +156,7 @@ class AuthService {
                 html: `
                     <h1> Restablecimiento de contraseña</h1>
                     <p>Has solicitado restablecer tu contraseña. Haz clic en el enlace para hacerlo</p>
-                    <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/reset-password/${reset_password_token}`}">Haz clic aquí para restablecer</a>
+                    <a href="${ENVIRONMENT.URL_FRONTEND + `/reset-password/${reset_password_token}`}">Haz clic aquí para restablecer</a>
                     <span>Si no reconoces este registro, desestima este correo.</span>
                 `
             })

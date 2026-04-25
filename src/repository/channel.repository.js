@@ -78,6 +78,22 @@ class ChannelRepository {
             throw new ServerError("Error al eliminar el canal de la base de datos", 500);
         }
     }
+
+    async update(channel_id, name, description) {
+    try {
+        const channel = await ChannelModel.findByIdAndUpdate(
+            channel_id,
+            { name, description },
+            { returnDocument: 'after' }
+        )
+
+        // Normalizo el canal
+        const normalized_channel = channel && new ChannelDTO(channel)
+        return normalized_channel
+    } catch (error) {
+        throw new ServerError("Error al actualizar el canal", 500);
+    }
+}
 }
 
 const channelRepository = new ChannelRepository()

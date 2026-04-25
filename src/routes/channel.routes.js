@@ -33,5 +33,15 @@ channelRouter.delete(
     channelController.delete
 )
 
+channelRouter.put(
+    '/:channel_id',
+    verifyMemberWorkspaceRoleMiddleware(
+        [available_member_roles.OWNER],
+        [available_member_roles.ADMIN]
+    ),
+    verifyChannelMiddleware,
+    channelController.update
+)
+
 
 export default channelRouter

@@ -5,7 +5,7 @@ import channelRepository from "../repository/channel.repository.js"
 
 class ChannelService {
     async create(workspace_id, name, description) {
-        if(!workspace_id || !name) {
+        if (!workspace_id || !name) {
             throw new ServerError("El ID del espacio de trabajo y el nombre son obligatorios", 400)
         }
         const channel = await channelRepository.create(workspace_id, name, description)
@@ -13,7 +13,7 @@ class ChannelService {
     }
 
     async getAll(workspace_id) {
-        if(!workspace_id) {
+        if (!workspace_id) {
             throw new ServerError("El ID del espacio de trabajo es obligatorio", 400)
         }
         const channels = await channelRepository.getAll(workspace_id)
@@ -21,33 +21,42 @@ class ChannelService {
     }
 
     async getById(workspace_id, channel_id) {
-        if(!workspace_id || !channel_id) {
+        if (!workspace_id || !channel_id) {
             throw new ServerError("El ID del espacio de trabajo y el ID del canal son obligatorios", 400)
         }
-        
+
         const channel = await channelRepository.getById(channel_id)
         return channel
     }
 
     async softDelete(workspace_id, channel_id) {
-        if(!workspace_id || !channel_id) {
+        if (!workspace_id || !channel_id) {
             throw new ServerError("El ID del espacio de trabajo y el ID del canal son obligatorios", 400)
         }
 
-        
+
         const channel = await channelRepository.softDelete(channel_id)
         return channel
     }
 
     async delete(workspace_id, channel_id) {
 
-        if(!workspace_id || !channel_id) {
+        if (!workspace_id || !channel_id) {
             throw new ServerError("El ID del espacio de trabajo y el ID del canal son obligatorios", 400)
         }
 
-        const channel = await channelRepository.delete( channel_id)
+        const channel = await channelRepository.delete(channel_id)
         return channel
     }
+
+    async update(workspace_id, channel_id, name, description) {
+    if (!workspace_id || !channel_id || !name) {
+        throw new ServerError("El ID del workspace, canal y nombre son obligatorios", 400)
+    }
+
+    const channel = await channelRepository.update(channel_id, name, description)
+    return channel
+}
 }
 
 const channelService = new ChannelService()

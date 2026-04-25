@@ -51,6 +51,24 @@ class ChannelController {
             next(error)
         }
     }
+
+    async update(req, res, next) {
+    try {
+        const { workspace_id, channel_id } = req.params
+        const { name, description } = req.body
+
+        const channel = await channelService.update(workspace_id, channel_id, name, description)
+
+        return res.status(200).json({
+            ok: true,
+            status: 200,
+            message: "El canal se ha actualizado exitosamente",
+            data: channel
+        })
+    } catch (error) {
+        next(error)
+    }
+}
 }
 
 const channelController = new ChannelController()

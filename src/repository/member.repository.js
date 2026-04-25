@@ -30,7 +30,19 @@ class WorkspaceMemberRepository {
     async getById(workspace_member_id) {
         try {
             const member = await WorkspaceMember.findById(workspace_member_id)
-            return member && new WorkspaceMemberDTO(member)
+                .populate('fk_id_user', 'name email')
+
+            if (!member || !member.fk_id_user) return null
+
+            return {
+                member_id: member._id,
+                member_role: member.role,
+                member_created_at: member.created_at,
+
+                user_id: member.fk_id_user._id,
+                user_name: member.fk_id_user.name,
+                user_email: member.fk_id_user.email
+            }
         } catch (error) {
             throw new ServerError("Error al obtener el miembro", 500);
         }

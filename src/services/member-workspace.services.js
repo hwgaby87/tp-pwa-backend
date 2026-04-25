@@ -48,7 +48,11 @@ class MemberWorkspaceService {
             if (!member_id) {
                 throw new ServerError("El ID del miembro es obligatorio", 400)
             }
-            return await workspaceMemberRepository.getById(member_id)
+            const member = await workspaceMemberRepository.getById(member_id)
+            if (!member) {
+                throw new ServerError("El miembro no existe", 404)
+            }
+            return member
         } catch (error) {
             throw error
         }

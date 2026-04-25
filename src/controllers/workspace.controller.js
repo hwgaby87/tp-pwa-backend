@@ -34,7 +34,7 @@ class WorkspaceController {
             await workspaceService.create(
                 title,
                 description,
-                'test_1.png',
+                null,
                 user.id
             )
 
