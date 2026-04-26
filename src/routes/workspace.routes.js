@@ -10,6 +10,11 @@ import memberWorkspaceRouter from './member-workspace.routes.js'
 const workspaceRouter = Router()
 
 workspaceRouter.get(
+    '/respond-invitation',
+    workspaceController.respondToInvitation
+)
+
+workspaceRouter.get(
     '/:workspace_id/member',
     workspaceController.respondToInvitation
 )

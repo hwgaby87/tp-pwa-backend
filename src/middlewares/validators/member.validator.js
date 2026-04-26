@@ -2,6 +2,7 @@ import { body, param } from 'express-validator';
 import userRepository from '../../repository/user.repository.js';
 import workspaceMemberRepository from '../../repository/member.repository.js';
 import AVAILABLE_MEMBER_ROLES from '../../constants/member-roles.constants.js';
+import AVAILABLE_INVITATION_RESPONSES from '../../constants/invitation-responses.constants.js';
 
 export const validateInviteMember = [
     param('workspace_id')
@@ -20,7 +21,7 @@ export const validateInviteMember = [
             const workspaceId = req.params.workspace_id;
             const existingMember = await workspaceMemberRepository.getByWorkspaceAndUserId(workspaceId, invitedUser._id);
             if (existingMember) {
-                if (existingMember.acceptInvitation === 'pending') {
+                if (existingMember.workspace_member_accept_invitation === AVAILABLE_INVITATION_RESPONSES.PENDING) {
                     throw new Error('El usuario ya tiene una invitación pendiente');
                 }
                 throw new Error('El usuario ya es miembro de este espacio de trabajo');
@@ -40,7 +41,7 @@ export const validateUpdateMember = [
             if (!member) {
                 throw new Error('El miembro no existe');
             }
-            if (member.role === AVAILABLE_MEMBER_ROLES.OWNER) {
+            if (member.member_role === AVAILABLE_MEMBER_ROLES.OWNER) {
                 throw new Error('No se puede degradar al owner del espacio de trabajo');
             }
             return true;
@@ -58,7 +59,7 @@ export const validateRemoveMember = [
             if (!member) {
                 throw new Error('El miembro no existe');
             }
-            if (member.role === AVAILABLE_MEMBER_ROLES.OWNER) {
+            if (member.member_role === AVAILABLE_MEMBER_ROLES.OWNER) {
                 throw new Error('No se puede eliminar al owner del espacio de trabajo');
             }
             return true;

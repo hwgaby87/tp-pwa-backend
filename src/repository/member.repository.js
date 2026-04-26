@@ -70,7 +70,7 @@ class WorkspaceMemberRepository {
                 member_id,
                 { acceptInvitation: status },
                 { new: true }
-            )
+            ).lean()
             return updated_member && new WorkspaceMemberDTO(updated_member)
         } catch (error) {
             throw new ServerError("Error al actualizar el estado de la invitación", 500);
@@ -138,7 +138,7 @@ class WorkspaceMemberRepository {
 
     async getByWorkspaceAndUserId(workspace_id, user_id) {
         try {
-            const member = await WorkspaceMember.findOne({ fk_id_workspace: workspace_id, fk_id_user: user_id })
+            const member = await WorkspaceMember.findOne({ fk_id_workspace: workspace_id, fk_id_user: user_id }).lean()
             return member && new WorkspaceMemberDTO(member)
         } catch (error) {
             throw new ServerError("Error al buscar el miembro en el espacio", 500);

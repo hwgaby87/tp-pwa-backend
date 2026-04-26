@@ -97,10 +97,11 @@ class WorkspaceController {
         const { token } = req.query
         try {
             const result = await memberWorkspaceService.respondToInvitation(token)
+            const statusMessage = result.workspace_member_accept_invitation === 'accepted' ? 'aceptada' : 'rechazada';
             res.status(200).json({
                 ok: true,
                 status: 200,
-                message: `Invitación ${result.acceptInvitation} con éxito`,
+                message: `Invitación ${statusMessage} con éxito`,
                 data: result
             })
         } catch (error) {

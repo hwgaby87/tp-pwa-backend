@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import ENVIRONMENT from "../config/environment.config.js"
 import mailerTransporter from "../config/mailer.config.js"
 import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constants.js"
+import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constants.js"
 
 
 class MemberWorkspaceService {
@@ -110,7 +111,7 @@ class MemberWorkspaceService {
 
         const existingMember = await workspaceMemberRepository.getByWorkspaceAndUserId(workspace_id, invitedUser._id)
         if (existingMember) {
-            if (existingMember.acceptInvitation === 'pending') {
+            if (existingMember.workspace_member_accept_invitation === AVAILABLE_INVITATION_RESPONSES.PENDING) {
                 throw new ServerError('Ya hay una invitación pendiente para este usuario', 400)
             }
             throw new ServerError('El usuario ya es miembro de este espacio de trabajo', 400)
@@ -122,7 +123,7 @@ class MemberWorkspaceService {
             {
                 email: invited_email,
                 workspace_id,
-                action: 'accepted'
+                action: AVAILABLE_INVITATION_RESPONSES.ACCEPTED
             },
             ENVIRONMENT.JWT_SECRET_KEY,
             { expiresIn: '7d' }
@@ -132,14 +133,14 @@ class MemberWorkspaceService {
             {
                 email: invited_email,
                 workspace_id,
-                action: 'rejected'
+                action: AVAILABLE_INVITATION_RESPONSES.REJECTED
             },
             ENVIRONMENT.JWT_SECRET_KEY,
             { expiresIn: '7d' }
         )
 
-        const accept_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${accept_token}`
-        const reject_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/${workspace_id}/member/?token=${reject_token}`
+        const accept_link = `${ENVIRONMENT.URL_FRONTEND}/invitation?token=${accept_token}`
+        const reject_link = `${ENVIRONMENT.URL_FRONTEND}/invitation?token=${reject_token}`
 
         await mailerTransporter.sendMail({
             from: ENVIRONMENT.MAIL_USER,
@@ -175,11 +176,12 @@ class MemberWorkspaceService {
                 throw new ServerError('La invitación no existe', 404)
             }
 
-            if (membership.acceptInvitation !== 'pending') {
-                throw new ServerError('Ya has respondido a esta invitación', 400)
+            if (membership.workspace_member_accept_invitation === action) {
+                const actionSpanish = action === 'accepted' ? 'aceptado' : 'rechazado';
+                throw new ServerError(`Ya has respondido '${actionSpanish}' a esta invitación`, 400)
             }
 
-            const updatedMembership = await workspaceMemberRepository.updateInvitationStatus(membership._id, action)
+            const updatedMembership = await workspaceMemberRepository.updateInvitationStatus(membership.workspace_member_id, action)
             return updatedMembership
 
         } catch (error) {
