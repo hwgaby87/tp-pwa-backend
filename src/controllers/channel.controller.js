@@ -52,6 +52,21 @@ class ChannelController {
         }
     }
 
+    async restore(req, res, next) {
+        try {
+            const { workspace_id, channel_id } = req.params
+            const channel = await channelService.restore(workspace_id, channel_id)
+            return res.status(200).json({
+                ok: true,
+                status: 200,
+                message: "El canal se ha restaurado exitosamente",
+                data: channel
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async update(req, res, next) {
     try {
         const { workspace_id, channel_id } = req.params

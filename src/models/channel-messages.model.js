@@ -15,6 +15,11 @@ const channelMessagesSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        enum: ['sent', 'delivered', 'read'],
+        default: 'sent'
+    },
     created_at: {
         type: Date,
         required: true,

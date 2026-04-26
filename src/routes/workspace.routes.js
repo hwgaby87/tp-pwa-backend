@@ -57,6 +57,12 @@ workspaceRouter.delete(
     workspaceController.delete
 )
 
+workspaceRouter.post(
+    '/:workspace_id/restore',
+    verifyMemberWorkspaceRoleMiddleware(['owner']),
+    workspaceController.restore
+)
+
 workspaceRouter.use(
     '/:workspace_id/channels',
     channelRouter

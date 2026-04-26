@@ -122,6 +122,20 @@ class WorkspaceController {
             next(error)
         }
     }
+
+    async restore(req, res, next) {
+        const { workspace_id } = req.params 
+        try {
+            await workspaceService.restoreWorkspaceById(workspace_id)
+            res.status(200).json({
+                ok: true,
+                status: 200,
+                message: 'Espacio de trabajo restaurado con éxito'
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 const workspaceController = new WorkspaceController()

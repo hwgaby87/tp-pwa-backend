@@ -77,6 +77,18 @@ class WorkspaceService {
             throw new ServerError("Error al eliminar el espacio de trabajo", 500);
         }
     }
+
+    async restoreWorkspaceById(workspace_id) {
+        if (!workspace_id) {
+            throw new ServerError("El ID del espacio de trabajo es obligatorio", 400);
+        }
+        try {
+            await workspaceRepository.restoreById(workspace_id);
+            return { message: "Espacio de trabajo restaurado exitosamente" };
+        } catch (error) {
+            throw new ServerError("Error al restaurar el espacio de trabajo", 500);
+        }
+    }
 }
 const workspaceService = new WorkspaceService()
 export default workspaceService

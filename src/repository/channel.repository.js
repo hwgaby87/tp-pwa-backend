@@ -39,9 +39,7 @@ class ChannelRepository {
 
     async getById(channel_id) {
         try {
-            const channel = await ChannelModel.findOne({ _id: channel_id })
-
-            // Normalizo el canal, solamente si existe
+            const channel = await ChannelModel.findOne({ _id: channel_id, is_active: true })
             const normalized_channel = channel && new ChannelDTO(channel)
             return normalized_channel
         } catch (error) {
@@ -65,15 +63,22 @@ class ChannelRepository {
         }
     }
 
+    async restore(channel_id) {
+        try {
+            const channel = await ChannelModel.findByIdAndUpdate(
+                channel_id,
+                { is_active: true },
+                { returnDocument: 'after' }
+            )
+            return channel && new ChannelDTO(channel)
+        } catch (error) {
+            throw new ServerError("Error al restaurar el canal", 500);
+        }
+    }
+
     async delete(channel_id) {
         try {
-            const channel = await ChannelModel.findByIdAndDelete(
-                channel_id
-            )
-
-            // Normalizo el canal
-            const normalized_channel = channel && new ChannelDTO(channel)
-            return normalized_channel
+            return await this.softDelete(channel_id)
         } catch (error) {
             throw new ServerError("Error al eliminar el canal de la base de datos", 500);
         }
@@ -81,8 +86,8 @@ class ChannelRepository {
 
     async update(channel_id, name, description) {
     try {
-        const channel = await ChannelModel.findByIdAndUpdate(
-            channel_id,
+        const channel = await ChannelModel.findOneAndUpdate(
+            { _id: channel_id, is_active: true },
             { name, description },
             { returnDocument: 'after' }
         )

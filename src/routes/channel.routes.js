@@ -1,5 +1,6 @@
 import express from 'express'
 import channelController from '../controllers/channel.controller.js'
+import messageRouter from './message.routes.js'
 import verifyWorkspaceMiddleware from '../middlewares/verify-workspace.middleware.js'
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
 import verifyChannelMiddleware from '../middlewares/verify-channel.middleware.js'
@@ -40,6 +41,15 @@ channelRouter.delete(
     channelController.delete
 )
 
+channelRouter.post(
+    '/:channel_id/restore',
+    verifyMemberWorkspaceRoleMiddleware(
+        [available_member_roles.OWNER],
+        [available_member_roles.ADMIN]
+    ),
+    channelController.restore
+)
+
 channelRouter.put(
     '/:channel_id',
     verifyMemberWorkspaceRoleMiddleware(
@@ -52,5 +62,7 @@ channelRouter.put(
     channelController.update
 )
 
+
+channelRouter.use('/:channel_id/messages', messageRouter)
 
 export default channelRouter

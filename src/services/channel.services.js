@@ -49,6 +49,14 @@ class ChannelService {
         return channel
     }
 
+    async restore(workspace_id, channel_id) {
+        if (!workspace_id || !channel_id) {
+            throw new ServerError("El ID del espacio de trabajo y el ID del canal son obligatorios", 400)
+        }
+        const channel = await channelRepository.restore(channel_id)
+        return channel
+    }
+
     async update(workspace_id, channel_id, name, description) {
     if (!workspace_id || !channel_id || !name) {
         throw new ServerError("El ID del workspace, canal y nombre son obligatorios", 400)

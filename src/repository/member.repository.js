@@ -117,7 +117,7 @@ class WorkspaceMemberRepository {
                 .populate('fk_id_workspace')
 
             const members_mapped = members
-                .filter(member => member.fk_id_workspace)
+                .filter(member => member.fk_id_workspace && member.fk_id_workspace.active)
                 .map((member) => {
                     return {
                         member_id: member._id,
