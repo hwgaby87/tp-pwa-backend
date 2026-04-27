@@ -1,6 +1,6 @@
 
 import ServerError from "../helpers/error.helper.js"
-import channelRepository from "../repository/channel.repository.js"
+import channelRepository from "../repositories/channel.repository.js"
 
 
 class ChannelService {

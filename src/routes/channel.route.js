@@ -1,10 +1,10 @@
 import express from 'express'
 import channelController from '../controllers/channel.controller.js'
-import messageRouter from './message.routes.js'
+import messageRouter from './message.route.js'
 import verifyWorkspaceMiddleware from '../middlewares/verify-workspace.middleware.js'
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
 import verifyChannelMiddleware from '../middlewares/verify-channel.middleware.js'
-import available_member_roles from '../constants/member-roles.constants.js'
+import available_member_roles from '../constants/member-roles.constant.js'
 import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
 import { validateChannelCreate, validateChannelUpdate, validateChannelDelete, validateChannelRestore } from '../middlewares/validators/channel.validator.js'
 

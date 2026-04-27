@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import MESSAGE_STATUS from "../constants/message-status.constants.js";
+import MESSAGE_STATUS from "../constants/message-status.constant.js";
 
 const directMessageSchema = new mongoose.Schema({
     fk_id_workspace: {

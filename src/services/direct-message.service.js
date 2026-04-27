@@ -1,5 +1,5 @@
-import directMessageRepository from "../repository/direct-message.repository.js";
-import workspaceMemberRepository from "../repository/member.repository.js";
+import directMessageRepository from "../repositories/direct-message.repository.js";
+import workspaceMemberRepository from "../repositories/member.repository.js";
 import ServerError from "../helpers/error.helper.js";
 
 class DirectMessageService {

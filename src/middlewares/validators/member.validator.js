@@ -1,8 +1,8 @@
 import { body, param } from 'express-validator';
-import userRepository from '../../repository/user.repository.js';
-import workspaceMemberRepository from '../../repository/member.repository.js';
-import AVAILABLE_MEMBER_ROLES from '../../constants/member-roles.constants.js';
-import AVAILABLE_INVITATION_RESPONSES from '../../constants/invitation-responses.constants.js';
+import userRepository from '../../repositories/user.repository.js';
+import workspaceMemberRepository from '../../repositories/member.repository.js';
+import AVAILABLE_MEMBER_ROLES from '../../constants/member-roles.constant.js';
+import AVAILABLE_INVITATION_RESPONSES from '../../constants/invitation-responses.constant.js';
 
 export const validateInviteMember = [
     param('workspace_id')

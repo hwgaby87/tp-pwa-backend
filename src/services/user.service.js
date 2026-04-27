@@ -1,5 +1,5 @@
-import userRepository from "../repository/user.repository.js";
-import workspaceMemberRepository from "../repository/member.repository.js";
+import userRepository from "../repositories/user.repository.js";
+import workspaceMemberRepository from "../repositories/member.repository.js";
 import ServerError from "../helpers/error.helper.js";
 
 class UserService {

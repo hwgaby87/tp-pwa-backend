@@ -1,4 +1,4 @@
-import ChannelDTO from "../dto/channel.dto.js"
+import ChannelDTO from "../dtos/channel.dto.js"
 import ChannelModel from "../models/channel.model.js"
 import ServerError from "../helpers/error.helper.js"
 

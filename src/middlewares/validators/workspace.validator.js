@@ -1,6 +1,6 @@
 import { body, param } from 'express-validator';
-import workspaceMemberRepository from '../../repository/member.repository.js';
-import workspaceRepository from '../../repository/workspace.repository.js';
+import workspaceMemberRepository from '../../repositories/member.repository.js';
+import workspaceRepository from '../../repositories/workspace.repository.js';
 import mongoose from 'mongoose';
 
 export const validateWorkspaceCreate = [

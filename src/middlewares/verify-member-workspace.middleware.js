@@ -1,6 +1,6 @@
-import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constants.js";
+import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constant.js";
 import ServerError from "../helpers/error.helper.js";
-import workspaceMemberRepository from "../repository/member.repository.js";
+import workspaceMemberRepository from "../repositories/member.repository.js";
 
 function verifyMemberWorkspaceRoleMiddleware(valid_roles = []) {
     

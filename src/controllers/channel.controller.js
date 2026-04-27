@@ -1,4 +1,4 @@
-import channelService from "../services/channel.services.js"
+import channelService from "../services/channel.service.js"
 
 class ChannelController {
     async create(req, res, next) {

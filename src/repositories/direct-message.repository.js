@@ -1,7 +1,7 @@
 import DirectMessageModel from "../models/direct-message.model.js"
-import DirectMessageDTO from "../dto/direct-message.dto.js"
+import DirectMessageDTO from "../dtos/direct-message.dto.js"
 import ServerError from "../helpers/error.helper.js"
-import MESSAGE_STATUS from "../constants/message-status.constants.js"
+import MESSAGE_STATUS from "../constants/message-status.constant.js"
 
 class DirectMessageRepository {
     async create(workspace_id, sender_id, receiver_id, content) {

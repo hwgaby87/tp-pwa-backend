@@ -1,11 +1,11 @@
 import ServerError from "../helpers/error.helper.js"
-import workspaceMemberRepository from "../repository/member.repository.js"
-import userRepository from "../repository/user.repository.js"
+import workspaceMemberRepository from "../repositories/member.repository.js"
+import userRepository from "../repositories/user.repository.js"
 import jwt from 'jsonwebtoken'
 import ENVIRONMENT from "../config/environment.config.js"
 import mailerTransporter from "../config/mailer.config.js"
-import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constants.js"
-import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constants.js"
+import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constant.js"
+import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constant.js"
 import getEmailTemplate from "../helpers/email-template.helper.js"
 
 

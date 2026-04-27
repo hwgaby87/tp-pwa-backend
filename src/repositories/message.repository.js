@@ -1,5 +1,5 @@
 import ChannelMessages from "../models/channel-messages.model.js";
-import ChannelMessagesDTO from "../dto/channel-messages.dto.js";
+import ChannelMessagesDTO from "../dtos/channel-messages.dto.js";
 import ServerError from "../helpers/error.helper.js";
 
 class MessageRepository {

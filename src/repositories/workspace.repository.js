@@ -1,5 +1,5 @@
 import WorkspaceModel from "../models/workspace.model.js";
-import WorkspaceDTO from "../dto/workspace.dto.js";
+import WorkspaceDTO from "../dtos/workspace.dto.js";
 import ServerError from "../helpers/error.helper.js";
 
 class WorkspaceRepository {

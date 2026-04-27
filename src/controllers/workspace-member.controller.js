@@ -1,4 +1,4 @@
-import memberWorkspaceService from "../services/member-workspace.services.js"
+import memberWorkspaceService from "../services/member-workspace.service.js"
 
 class WorkspaceMemberController {
     async inviteMember(req, res, next) {

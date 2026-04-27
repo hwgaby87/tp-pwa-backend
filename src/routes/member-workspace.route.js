@@ -1,7 +1,7 @@
 import express from 'express'
 import workspaceMemberController from '../controllers/workspace-member.controller.js'
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
-import available_member_roles from '../constants/member-roles.constants.js'
+import available_member_roles from '../constants/member-roles.constant.js'
 import authmiddleware from '../middlewares/auth.middleware.js'
 import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
 import { validateInviteMember, validateUpdateMember, validateRemoveMember } from '../middlewares/validators/member.validator.js'

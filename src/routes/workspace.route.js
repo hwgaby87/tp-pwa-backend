@@ -4,9 +4,9 @@ import authMiddleware from '../middlewares/auth.middleware.js'
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
 import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
 import { validateWorkspaceCreate, validateWorkspaceUpdate, validateWorkspaceDelete } from '../middlewares/validators/workspace.validator.js'
-import channelRouter from './channel.routes.js'
-import memberWorkspaceRouter from './member-workspace.routes.js'
-import directMessageRouter from './direct-message.routes.js'
+import channelRouter from './channel.route.js'
+import memberWorkspaceRouter from './member-workspace.route.js'
+import directMessageRouter from './direct-message.route.js'
 
 const workspaceRouter = Router()
 

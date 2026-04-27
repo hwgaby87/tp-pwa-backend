@@ -1,4 +1,4 @@
-import directMessageService from "../services/direct-message.services.js";
+import directMessageService from "../services/direct-message.service.js";
 
 class DirectMessageController {
     async sendMessage(req, res, next) {

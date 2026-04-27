@@ -1,4 +1,4 @@
-import userRepository from "../repository/user.repository.js"
+import userRepository from "../repositories/user.repository.js"
 
 class HealthController {
     getApi (request, response) {

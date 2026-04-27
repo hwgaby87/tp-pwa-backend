@@ -1,9 +1,9 @@
-import workspaceMemberRepository from "../repository/member.repository.js"
-import memberWorkspaceService from "../services/member-workspace.services.js"
-import workspaceService from "../services/workspace.services.js"
+import workspaceMemberRepository from "../repositories/member.repository.js"
+import memberWorkspaceService from "../services/member-workspace.service.js"
+import workspaceService from "../services/workspace.service.js"
 import ServerError from "../helpers/error.helper.js"
-import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constants.js"
-import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constants.js"
+import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constant.js"
+import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constant.js"
 
 class WorkspaceController {
     async getWorkspaces(request, response, next) {

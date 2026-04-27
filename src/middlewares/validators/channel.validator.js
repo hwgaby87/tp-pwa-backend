@@ -1,5 +1,5 @@
 import { body, param } from 'express-validator';
-import channelRepository from '../../repository/channel.repository.js';
+import channelRepository from '../../repositories/channel.repository.js';
 
 export const validateChannelCreate = [
     param('workspace_id')

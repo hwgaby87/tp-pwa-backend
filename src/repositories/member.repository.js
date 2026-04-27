@@ -1,7 +1,7 @@
 import WorkspaceMember from "../models/workspace-member.model.js"
-import WorkspaceMemberDTO from "../dto/workspace-member.dto.js"
+import WorkspaceMemberDTO from "../dtos/workspace-member.dto.js"
 import ServerError from "../helpers/error.helper.js"
-import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constants.js"
+import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constant.js"
 
 class WorkspaceMemberRepository {
     async create(fk_id_workspace, fk_id_user, role, acceptInvitation) {

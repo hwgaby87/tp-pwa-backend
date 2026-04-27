@@ -1,6 +1,6 @@
 import ServerError from "../helpers/error.helper.js"
-import workspaceRepository from "../repository/workspace.repository.js"
-import memberWorkspaceService from "./member-workspace.services.js"
+import workspaceRepository from "../repositories/workspace.repository.js"
+import memberWorkspaceService from "./member-workspace.service.js"
 
 class WorkspaceService {
     async create(title, description, url_image, user_id) {

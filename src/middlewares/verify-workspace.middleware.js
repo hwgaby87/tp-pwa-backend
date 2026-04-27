@@ -1,6 +1,6 @@
 import { isValidObjectId } from "mongoose"
 import ServerError from "../helpers/error.helper.js"
-import workspaceRepository from "../repository/workspace.repository.js"
+import workspaceRepository from "../repositories/workspace.repository.js"
 
 
 async function verifyWorkspaceMiddleware(req, res, next) {

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import available_invitation_responses from "../constants/invitation-responses.constants.js";
-import available_member_roles from "../constants/member-roles.constants.js";
+import available_invitation_responses from "../constants/invitation-responses.constant.js";
+import available_member_roles from "../constants/member-roles.constant.js";
 
 const workspaceMemberSchema = new mongoose.Schema({
     fk_id_user: {

@@ -1,9 +1,19 @@
 import User from "../models/user.model.js"
-import UserDTO from "../dto/user.dto.js"
+import UserDTO from "../dtos/user.dto.js"
 import ServerError from "../helpers/error.helper.js"
 
+/**
+ * UserRepository
+ * El patrón "Repositorio" se utiliza para aislar a la capa de servicios de los
+ * detalles concretos de la base de datos (MongoDB/Mongoose en este caso).
+ * Todas las consultas (guardar, buscar, eliminar, actualizar) a la tabla de
+ * usuarios se centralizan aquí.
+ */
 class UserRepository {
 
+    /**
+     * Crea un nuevo usuario en la base de datos.
+     */
     async create(username, email, password) {
         try {
             await User.create({
@@ -12,8 +22,10 @@ class UserRepository {
                 password: password
             })
         } catch (error) {
-            if (error.code === 11000) //11000 es el código de error de MongoDB para violación de clave única
-            {   //keyPattern es un objeto que MongoDB incluye en el error para indicar qué campo causó la violación de clave única
+            // 11000 es el código de error de MongoDB para violación de clave única (ej: email repetido)
+            if (error.code === 11000) 
+            {   
+                // keyPattern es un objeto que MongoDB incluye en el error para indicar qué campo causó la violación
                 if (error.keyPattern?.email) throw new ServerError("El email ya está registrado", 400);
                 if (error.keyPattern?.name) throw new ServerError("El nombre de usuario ya está registrado", 400);
             }
@@ -21,6 +33,9 @@ class UserRepository {
         }
     }
 
+    /**
+     * Elimina un usuario buscando por su ID.
+     */
     async deleteById(user_id) {
         try {
             await User.findByIdAndDelete(user_id)
@@ -29,6 +44,10 @@ class UserRepository {
         }
     }
 
+    /**
+     * Obtiene un usuario por su ID y lo devuelve formateado como DTO (Data Transfer Object).
+     * El DTO sirve para ocultar campos sensibles como contraseñas antes de enviarlo.
+     */
     async getById(user_id) {
         try {
             const user = await User.findById(user_id)
@@ -38,6 +57,9 @@ class UserRepository {
         }
     }
 
+    /**
+     * Obtiene todos los usuarios, pero excluye (-password) la contraseña de la búsqueda.
+     */
     async getAll() {
         try {
             const users = await User.find({}, '-password')
@@ -47,12 +69,15 @@ class UserRepository {
         }
     }
 
+    /**
+     * Actualiza propiedades específicas de un usuario buscando por su ID.
+     */
     async updateById(id, new_user_props) {
         try {
             const new_user = await User.findByIdAndUpdate(
                 id,
                 new_user_props,
-                { returnDocument: 'after' }
+                { returnDocument: 'after' } // 'after' hace que devuelva el documento YA actualizado
             )
             return new_user && new UserDTO(new_user)
         } catch (error) {
@@ -63,6 +88,9 @@ class UserRepository {
         }
     }
 
+    /**
+     * Busca un usuario por su email.
+     */
     async getByEmail(email) {
         try {
             const user = await User.findOne({ email: email })
@@ -72,6 +100,9 @@ class UserRepository {
         }
     }
 
+    /**
+     * Obtiene un usuario cualquiera (útil para pruebas o sacar un registro).
+     */
     async getUser() {
         try {
             const user = await User.findOne()
@@ -81,6 +112,9 @@ class UserRepository {
         }
     }
 
+    /**
+     * Busca un usuario por su nombre.
+     */
     async getByUsername(name) {
         try {
             const user = await User.findOne({ name: name })

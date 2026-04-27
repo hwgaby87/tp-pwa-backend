@@ -1,7 +1,7 @@
-import messageRepository from "../repository/message.repository.js";
-import workspaceMemberRepository from "../repository/member.repository.js";
+import messageRepository from "../repositories/message.repository.js";
+import workspaceMemberRepository from "../repositories/member.repository.js";
 import ServerError from "../helpers/error.helper.js";
-import MESSAGE_STATUS from "../constants/message-status.constants.js";
+import MESSAGE_STATUS from "../constants/message-status.constant.js";
 
 class MessageService {
     async sendMessage(workspace_id, channel_id, user_id, content) {
