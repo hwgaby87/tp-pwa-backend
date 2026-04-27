@@ -1,6 +1,7 @@
 import WorkspaceMember from "../models/workspace-member.model.js"
 import WorkspaceMemberDTO from "../dto/workspace-member.dto.js"
 import ServerError from "../helpers/error.helper.js"
+import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constants.js"
 
 class WorkspaceMemberRepository {
     async create(fk_id_workspace, fk_id_user, role, acceptInvitation) {
@@ -9,7 +10,7 @@ class WorkspaceMemberRepository {
                 fk_id_workspace,
                 fk_id_user,
                 role,
-                acceptInvitation: acceptInvitation || 'pending'
+                acceptInvitation: acceptInvitation || AVAILABLE_INVITATION_RESPONSES.PENDING
             })
             return new WorkspaceMemberDTO(member)
         } catch (error) {

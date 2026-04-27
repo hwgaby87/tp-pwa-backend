@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import MESSAGE_STATUS from "../constants/message-status.constants.js";
 
 const channelMessagesSchema = new mongoose.Schema({
     fk_id_channel: {
@@ -17,8 +18,8 @@ const channelMessagesSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['enviado', 'recibido', 'leído'],
-        default: 'enviado'
+        enum: Object.values(MESSAGE_STATUS),
+        default: MESSAGE_STATUS.ENVIADO
     },
     created_at: {
         type: Date,

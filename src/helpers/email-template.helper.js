@@ -12,7 +12,7 @@ const getEmailTemplate = (content, title = 'Conecta App') => {
             body {
                 margin: 0;
                 padding: 0;
-                background-color: #f8f9fa;
+                background-color: #faf6f0;
                 font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
                 color: #2d3436;
                 line-height: 1.6;
@@ -27,8 +27,8 @@ const getEmailTemplate = (content, title = 'Conecta App') => {
                 border: 1px solid #edf2f7;
             }
             .email-header {
-                background: linear-gradient(135deg, #c47c5e 0%, #d68b6d 100%);
-                padding: 40px 20px;
+                background: linear-gradient(135deg, #c47c5e 0%, #a86448 100%);
+                padding: 45px 20px;
                 text-align: center;
                 color: #ffffff;
             }
@@ -46,8 +46,8 @@ const getEmailTemplate = (content, title = 'Conecta App') => {
                 text-align: center;
                 font-size: 14px;
                 color: #94a3b8;
-                background-color: #f8fafc;
-                border-top: 1px solid #edf2f7;
+                background-color: #f2ebe1;
+                border-top: 1px solid #e3d8c8;
             }
             .btn {
                 display: inline-block;
@@ -78,9 +78,9 @@ const getEmailTemplate = (content, title = 'Conecta App') => {
                 align-items: center;
                 gap: 15px;
                 padding: 20px;
-                background-color: #f8fafc;
-                border-radius: 16px;
-                margin-bottom: 25px;
+                background-color: #ffffff;
+                border-radius: 12px;
+                border: 1px solid #e3d8c8;
             }
             .member-avatar {
                 width: 48px;

@@ -2,6 +2,8 @@ import workspaceMemberRepository from "../repository/member.repository.js"
 import memberWorkspaceService from "../services/member-workspace.services.js"
 import workspaceService from "../services/workspace.services.js"
 import ServerError from "../helpers/error.helper.js"
+import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constants.js"
+import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constants.js"
 
 class WorkspaceController {
     async getWorkspaces(request, response, next) {
@@ -98,7 +100,7 @@ class WorkspaceController {
             const user = request.user
             const member = await workspaceMemberRepository.isMemberPartOfWorkspaceById(user.id, workspace_id)
             const memberRole = member?.role || member?.workspace_member_role
-            if (!member || !['admin', 'owner'].includes(memberRole)) {
+            if (!member || ![AVAILABLE_MEMBER_ROLES.ADMIN, AVAILABLE_MEMBER_ROLES.OWNER].includes(memberRole)) {
                 throw new ServerError('No tienes permisos para actualizar este espacio de trabajo', 403)
             }
             const workspace = await workspaceService.update(workspace_id, title, description)
@@ -117,7 +119,7 @@ class WorkspaceController {
         const { token } = req.query
         try {
             const result = await memberWorkspaceService.respondToInvitation(token)
-            const statusMessage = result.workspace_member_accept_invitation === 'accepted' ? 'aceptada' : 'rechazada';
+            const statusMessage = result.workspace_member_accept_invitation === AVAILABLE_INVITATION_RESPONSES.ACCEPTED ? 'aceptada' : 'rechazada';
             res.status(200).json({
                 ok: true,
                 status: 200,

@@ -1,6 +1,7 @@
 import messageRepository from "../repository/message.repository.js";
 import workspaceMemberRepository from "../repository/member.repository.js";
 import ServerError from "../helpers/error.helper.js";
+import MESSAGE_STATUS from "../constants/message-status.constants.js";
 
 class MessageService {
     async sendMessage(workspace_id, channel_id, user_id, content) {
@@ -29,14 +30,14 @@ class MessageService {
         if (!message_id) {
             throw new ServerError("El ID del mensaje es obligatorio", 400);
         }
-        return await messageRepository.updateStatus(message_id, 'leído');
+        return await messageRepository.updateStatus(message_id, MESSAGE_STATUS.LEIDO);
     }
 
     async markAsReceived(message_id) {
         if (!message_id) {
             throw new ServerError("El ID del mensaje es obligatorio", 400);
         }
-        return await messageRepository.updateStatus(message_id, 'recibido');
+        return await messageRepository.updateStatus(message_id, MESSAGE_STATUS.RECIBIDO);
     }
 
     async deleteMessage(message_id, user_id) {

@@ -1,6 +1,7 @@
 import DirectMessageModel from "../models/direct-message.model.js"
 import DirectMessageDTO from "../dto/direct-message.dto.js"
 import ServerError from "../helpers/error.helper.js"
+import MESSAGE_STATUS from "../constants/message-status.constants.js"
 
 class DirectMessageRepository {
     async create(workspace_id, sender_id, receiver_id, content) {
@@ -55,7 +56,7 @@ class DirectMessageRepository {
         try {
             const message = await DirectMessageModel.findByIdAndUpdate(
                 message_id,
-                { status: 'leído' },
+                { status: MESSAGE_STATUS.LEIDO },
                 { new: true }
             )
             return message && new DirectMessageDTO(message)
@@ -68,7 +69,7 @@ class DirectMessageRepository {
         try {
             const message = await DirectMessageModel.findByIdAndUpdate(
                 message_id,
-                { status: 'recibido' },
+                { status: MESSAGE_STATUS.RECIBIDO },
                 { new: true }
             )
             return message && new DirectMessageDTO(message)
