@@ -20,6 +20,14 @@ class ChannelService {
         return channels
     }
 
+    async getDeleted(workspace_id) {
+        if (!workspace_id) {
+            throw new ServerError("El ID del espacio de trabajo es obligatorio", 400)
+        }
+        const channels = await channelRepository.getDeleted(workspace_id)
+        return channels
+    }
+
     async getById(workspace_id, channel_id) {
         if (!workspace_id || !channel_id) {
             throw new ServerError("El ID del espacio de trabajo y el ID del canal son obligatorios", 400)

@@ -70,6 +70,9 @@ class WorkspaceService {
             if (!workspace) {
                 throw new ServerError("El espacio de trabajo no existe", 404);
             }
+            if (!workspace.active) {
+                throw new ServerError("El espacio de trabajo ya se encuentra archivado", 400);
+            }
             await workspaceRepository.deleteById(workspace_id);
             return { message: "Espacio de trabajo eliminado exitosamente" };
         } catch (error) {
@@ -83,6 +86,13 @@ class WorkspaceService {
             throw new ServerError("El ID del espacio de trabajo es obligatorio", 400);
         }
         try {
+            const workspace = await workspaceRepository.getById(workspace_id);
+            if (!workspace) {
+                throw new ServerError("El espacio de trabajo no existe", 404);
+            }
+            if (workspace.active) {
+                throw new ServerError("El espacio de trabajo ya se encuentra activo", 400);
+            }
             await workspaceRepository.restoreById(workspace_id);
             return { message: "Espacio de trabajo restaurado exitosamente" };
         } catch (error) {

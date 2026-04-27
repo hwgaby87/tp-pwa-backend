@@ -29,14 +29,14 @@ class MessageService {
         if (!message_id) {
             throw new ServerError("El ID del mensaje es obligatorio", 400);
         }
-        return await messageRepository.updateStatus(message_id, 'read');
+        return await messageRepository.updateStatus(message_id, 'leído');
     }
 
-    async markAsDelivered(message_id) {
+    async markAsReceived(message_id) {
         if (!message_id) {
             throw new ServerError("El ID del mensaje es obligatorio", 400);
         }
-        return await messageRepository.updateStatus(message_id, 'delivered');
+        return await messageRepository.updateStatus(message_id, 'recibido');
     }
 
     async deleteMessage(message_id, user_id) {

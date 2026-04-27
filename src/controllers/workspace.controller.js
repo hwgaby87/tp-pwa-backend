@@ -27,6 +27,26 @@ class WorkspaceController {
         }
     }
 
+    async getArchivedWorkspaces(request, response, next) {
+        try {
+            const user = request.user
+            const workspaces = await workspaceMemberRepository.getArchivedWorkspaceListByUserId(user.id)
+            response.json(
+                {
+                    ok: true,
+                    status: 200,
+                    message: 'Espacios de trabajo archivados obtenidos',
+                    data: {
+                        workspaces
+                    }
+                }
+            )
+        }
+        catch (error) {
+            next(error)
+        }
+    }
+
     async create(request, response, next) {
         try {
             const { title, description } = request.body

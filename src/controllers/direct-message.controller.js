@@ -1,13 +1,13 @@
-import messageService from "../services/message.services.js";
+import directMessageService from "../services/direct-message.services.js";
 
-class MessageController {
+class DirectMessageController {
     async sendMessage(req, res, next) {
         try {
-            const { workspace_id, channel_id } = req.params;
+            const { workspace_id, receiver_member_id } = req.params;
             const { content } = req.body;
             const user_id = req.user.id;
 
-            const message = await messageService.sendMessage(workspace_id, channel_id, user_id, content);
+            const message = await directMessageService.sendMessage(workspace_id, user_id, receiver_member_id, content);
 
             res.status(201).json({
                 ok: true,
@@ -20,10 +20,12 @@ class MessageController {
         }
     }
 
-    async getMessages(req, res, next) {
+    async getConversation(req, res, next) {
         try {
-            const { channel_id } = req.params;
-            const messages = await messageService.getMessages(channel_id);
+            const { workspace_id, other_member_id } = req.params;
+            const user_id = req.user.id;
+
+            const messages = await directMessageService.getConversation(workspace_id, user_id, other_member_id);
 
             res.status(200).json({
                 ok: true,
@@ -39,7 +41,7 @@ class MessageController {
     async markAsRead(req, res, next) {
         try {
             const { message_id } = req.params;
-            const message = await messageService.markAsRead(message_id);
+            const message = await directMessageService.markAsRead(message_id);
 
             res.status(200).json({
                 ok: true,
@@ -55,7 +57,7 @@ class MessageController {
     async markAsReceived(req, res, next) {
         try {
             const { message_id } = req.params;
-            const message = await messageService.markAsReceived(message_id);
+            const message = await directMessageService.markAsReceived(message_id);
 
             res.status(200).json({
                 ok: true,
@@ -70,10 +72,10 @@ class MessageController {
 
     async deleteMessage(req, res, next) {
         try {
-            const { message_id } = req.params;
+            const { message_id, workspace_id } = req.params;
             const user_id = req.user.id;
 
-            const result = await messageService.deleteMessage(message_id, user_id);
+            const result = await directMessageService.deleteMessage(message_id, user_id, workspace_id);
 
             res.status(200).json({
                 ok: true,
@@ -86,5 +88,5 @@ class MessageController {
     }
 }
 
-const messageController = new MessageController();
-export default messageController;
+const directMessageController = new DirectMessageController();
+export default directMessageController;

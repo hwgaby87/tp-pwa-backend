@@ -15,6 +15,7 @@ messageRouter.use(verifyMemberWorkspaceRoleMiddleware());
 messageRouter.post('/', messageController.sendMessage);
 messageRouter.get('/', messageController.getMessages);
 messageRouter.put('/:message_id/read', messageController.markAsRead);
+messageRouter.put('/:message_id/received', messageController.markAsReceived);
 messageRouter.delete('/:message_id', messageController.deleteMessage);
 
 export default messageRouter;

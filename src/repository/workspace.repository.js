@@ -38,7 +38,7 @@ class WorkspaceRepository {
 
     async getById(workspace_id) {
         try {
-            const workspace = await WorkspaceModel.findOne({ _id: workspace_id, active: true })
+            const workspace = await WorkspaceModel.findById(workspace_id)
             return workspace && new WorkspaceDTO(workspace)
         } catch (error) {
             throw new ServerError("Error al obtener el espacio de trabajo", 500);
@@ -47,8 +47,8 @@ class WorkspaceRepository {
 
     async updateById(workspace_id, new_workspace_props) {
         try {
-            const new_workspace = await WorkspaceModel.findOneAndUpdate(
-                { _id: workspace_id, active: true },
+            const new_workspace = await WorkspaceModel.findByIdAndUpdate(
+                workspace_id,
                 new_workspace_props, 
                 { new: true }
             )

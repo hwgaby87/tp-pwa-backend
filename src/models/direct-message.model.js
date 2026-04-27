@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 
-const channelMessagesSchema = new mongoose.Schema({
-    fk_id_channel: {
+const directMessageSchema = new mongoose.Schema({
+    fk_id_workspace: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Channel",
+        ref: "Workspace",
         required: true
     },
-    fk_id_member: {
+    fk_id_sender: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "WorkspaceMember",
+        required: true
+    },
+    fk_id_receiver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "WorkspaceMember",
         required: true
@@ -31,6 +36,6 @@ const channelMessagesSchema = new mongoose.Schema({
     }
 })
 
-const ChannelMessages = mongoose.model("ChannelMessage", channelMessagesSchema, "channel_messages")
+const DirectMessage = mongoose.model("DirectMessage", directMessageSchema, "direct_messages")
 
-export default ChannelMessages
+export default DirectMessage

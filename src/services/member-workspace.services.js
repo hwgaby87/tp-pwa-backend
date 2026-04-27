@@ -6,6 +6,7 @@ import ENVIRONMENT from "../config/environment.config.js"
 import mailerTransporter from "../config/mailer.config.js"
 import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constants.js"
 import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constants.js"
+import getEmailTemplate from "../helpers/email-template.helper.js"
 
 
 class MemberWorkspaceService {
@@ -146,13 +147,32 @@ class MemberWorkspaceService {
             from: ENVIRONMENT.MAIL_USER,
             to: invited_email,
             subject: `Invitación a unirse al espacio de trabajo`,
-            html: `
-            <h1>Has sido invitado a un espacio de trabajo</h1>
-            <p>Haz clic en uno de los siguientes enlaces para aceptar o rechazar la invitación:</p>
-            <a href="${accept_link}" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Aceptar Invitación</a>
-            <br/><br/>
-            <a href="${reject_link}" style="background-color: #f44336; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Rechazar Invitación</a>
-        `
+            html: getEmailTemplate(`
+                <div class="content-block">
+                    <h2>Has sido invitado</h2>
+                    <p>¡Hola! Has sido invitado a unirte a un espacio de trabajo en <strong>Conecta</strong>.</p>
+                </div>
+                
+                <div class="member-preview">
+                    <div class="member-avatar">
+                        ${invitedUser.image ? `<img src="${invitedUser.image}" class="member-avatar" />` : (invitedUser.name?.substring(0, 1).toUpperCase() || 'U')}
+                    </div>
+                    <div class="member-info">
+                        <h3>${invitedUser.name}</h3>
+                        <p>${invited_email}</p>
+                    </div>
+                </div>
+
+                <div class="content-block text-center">
+                    <p>Haz clic en uno de los siguientes botones para responder a la invitación:</p>
+                    <a href="${accept_link}" class="btn btn-primary">Aceptar Invitación</a>
+                    <a href="${reject_link}" class="btn btn-secondary">Rechazar</a>
+                </div>
+                
+                <div class="content-block" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #edf2f7; font-size: 13px; color: #64748b;">
+                    <p>Esta invitación expirará en 7 días.</p>
+                </div>
+            `, 'Invitación al Espacio de Trabajo')
         })
 
         return newMember

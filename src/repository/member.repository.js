@@ -31,7 +31,7 @@ class WorkspaceMemberRepository {
     async getById(workspace_member_id) {
         try {
             const member = await WorkspaceMember.findById(workspace_member_id)
-                .populate('fk_id_user', 'name email')
+                .populate('fk_id_user', 'name email image')
 
             if (!member || !member.fk_id_user) return null
 
@@ -44,6 +44,7 @@ class WorkspaceMemberRepository {
                 user_id: member.fk_id_user._id,
                 user_name: member.fk_id_user.name,
                 user_email: member.fk_id_user.email,
+                user_image: member.fk_id_user.image,
                 invitation_status: member.acceptInvitation
             }
         } catch (error) {
@@ -89,7 +90,7 @@ class WorkspaceMemberRepository {
     async getMemberList(fk_id_workspace) {
         try {
             const members = await WorkspaceMember.find({ fk_id_workspace: fk_id_workspace })
-                .populate('fk_id_user', 'name email')
+                .populate('fk_id_user', 'name email image')
 
             const members_mapped = members
                 .filter(member => member.fk_id_user)
@@ -102,6 +103,7 @@ class WorkspaceMemberRepository {
                         user_id: member.fk_id_user._id,
                         user_name: member.fk_id_user.name,
                         user_email: member.fk_id_user.email,
+                        user_image: member.fk_id_user.image,
                         invitation_status: member.acceptInvitation
                     }
                 })
@@ -117,7 +119,33 @@ class WorkspaceMemberRepository {
                 .populate('fk_id_workspace')
 
             const members_mapped = members
-                .filter(member => member.fk_id_workspace && member.fk_id_workspace.active)
+                .filter(member => member.fk_id_workspace)
+                .map((member) => {
+                    return {
+                        member_id: member._id,
+                        member_role: member.role,
+                        member_created_at: member.created_at,
+
+                        workspace_id: member.fk_id_workspace._id,
+                        workspace_title: member.fk_id_workspace.title,
+                        workspace_description: member.fk_id_workspace.description,
+                        workspace_active: member.fk_id_workspace.active
+                    }
+                })
+
+            return members_mapped
+        } catch (error) {
+            throw new ServerError("Error al obtener la lista de espacios de trabajo del usuario", 500);
+        }
+    }
+
+    async getArchivedWorkspaceListByUserId(user_id) {
+        try {
+            const members = await WorkspaceMember.find({ fk_id_user: user_id })
+                .populate('fk_id_workspace')
+
+            const members_mapped = members
+                .filter(member => member.fk_id_workspace && !member.fk_id_workspace.active)
                 .map((member) => {
                     return {
                         member_id: member._id,
@@ -132,7 +160,7 @@ class WorkspaceMemberRepository {
 
             return members_mapped
         } catch (error) {
-            throw new ServerError("Error al obtener la lista de espacios de trabajo del usuario", 500);
+            throw new ServerError("Error al obtener la lista de espacios de trabajo archivados", 500);
         }
     }
 

@@ -37,7 +37,7 @@ export const validateChannelUpdate = [
             const workspaceId = req.params.workspace_id;
             const channelId = req.params.channel_id;
             const duplicate = await channelRepository.findByNameAndWorkspace(name, workspaceId);
-            if (duplicate && duplicate._id.toString() !== channelId) {
+            if (duplicate && duplicate.channel_id.toString() !== channelId) {
                 throw new Error('Ya existe otro canal con este nombre en este espacio de trabajo');
             }
             return true;
@@ -57,8 +57,28 @@ export const validateChannelDelete = [
             if (!channel) {
                 throw new Error('El canal no existe');
             }
-            if (channel.fk_id_workspace.toString() !== req.params.workspace_id) {
+            if (channel.channel_workspace_id.toString() !== req.params.workspace_id) {
                 throw new Error('El canal no pertenece a este espacio de trabajo');
+            }
+            return true;
+        })
+];
+
+export const validateChannelRestore = [
+    param('workspace_id')
+        .isMongoId().withMessage('ID de espacio de trabajo inválido'),
+    param('channel_id')
+        .isMongoId().withMessage('ID de canal inválido')
+        .custom(async (channel_id, { req }) => {
+            const channel = await channelRepository.getByIdIncludeInactive(channel_id);
+            if (!channel) {
+                throw new Error('El canal no existe');
+            }
+            if (channel.channel_workspace_id.toString() !== req.params.workspace_id) {
+                throw new Error('El canal no pertenece a este espacio de trabajo');
+            }
+            if (channel.channel_is_active) {
+                throw new Error('El canal ya está activo');
             }
             return true;
         })

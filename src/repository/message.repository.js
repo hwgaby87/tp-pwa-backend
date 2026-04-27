@@ -18,7 +18,10 @@ class MessageRepository {
 
     async getByChannelId(channel_id) {
         try {
-            const messages = await ChannelMessages.find({ fk_id_channel: channel_id })
+            const messages = await ChannelMessages.find({ 
+                fk_id_channel: channel_id,
+                deleted_at: null
+            })
                 .populate({
                     path: 'fk_id_member',
                     populate: {
@@ -66,7 +69,9 @@ class MessageRepository {
 
     async delete(message_id) {
         try {
-            await ChannelMessages.findByIdAndDelete(message_id);
+            await ChannelMessages.findByIdAndUpdate(message_id, {
+                deleted_at: new Date()
+            });
         } catch (error) {
             throw new ServerError("Error al eliminar el mensaje", 500);
         }

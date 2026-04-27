@@ -6,6 +6,7 @@ import handleValidationErrors from '../middlewares/handle-validation.middleware.
 import { validateWorkspaceCreate, validateWorkspaceUpdate, validateWorkspaceDelete } from '../middlewares/validators/workspace.validator.js'
 import channelRouter from './channel.routes.js'
 import memberWorkspaceRouter from './member-workspace.routes.js'
+import directMessageRouter from './direct-message.routes.js'
 
 const workspaceRouter = Router()
 
@@ -24,6 +25,11 @@ workspaceRouter.use(authMiddleware) // Protege todas las rutas siguientes
 workspaceRouter.get(
     '/',
     workspaceController.getWorkspaces
+)
+
+workspaceRouter.get(
+    '/archived',
+    workspaceController.getArchivedWorkspaces
 )
 
 workspaceRouter.post(
@@ -71,6 +77,11 @@ workspaceRouter.use(
 workspaceRouter.use(
     '/:workspace_id/members',
     memberWorkspaceRouter
+)
+
+workspaceRouter.use(
+    '/:workspace_id/direct-messages',
+    directMessageRouter
 )
 
 export default workspaceRouter

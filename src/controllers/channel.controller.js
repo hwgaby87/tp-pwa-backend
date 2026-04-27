@@ -35,6 +35,22 @@ class ChannelController {
         }
     }
 
+    async getDeleted(req, res, next) {
+        try {
+            const { workspace_id } = req.params
+
+            const channels = await channelService.getDeleted(workspace_id)
+
+            return res.status(200).json({
+                ok: true,
+                status: 200,
+                data: channels
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     async delete(req, res, next) {
         try {
             const { workspace_id, channel_id } = req.params

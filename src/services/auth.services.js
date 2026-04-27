@@ -4,6 +4,7 @@ import mailerTransporter from "../config/mailer.config.js";
 import ServerError from "../helpers/error.helper.js";
 import userRepository from "../repository/user.repository.js";
 import bcrypt from 'bcrypt'
+import getEmailTemplate from "../helpers/email-template.helper.js";
 
 class AuthService {
     async register({ name, email, password }) {
@@ -118,12 +119,18 @@ class AuthService {
                 from: ENVIRONMENT.MAIL_USER,
                 to: email,
                 subject: `Bienvenido ${name} verifica tu correo electrónico`,
-                html: `
-                    <h1>Bienvenido ${name}</h1>
-                    <p>Te has registrado correctamente, necesitamos verificar tu correo electrónico</p>
-                    <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/verify-email?verify_email_token=${verify_email_token}`}">Haz clic aquí para verificar</a>
-                    <span>Si no reconoces este registro, desestima este correo.</span>
-                `
+                html: getEmailTemplate(`
+                    <div class="content-block">
+                        <h2>¡Bienvenido, ${name}!</h2>
+                        <p>Te has registrado correctamente en <strong>Conecta</strong>. Para completar tu registro y asegurar tu cuenta, necesitamos verificar tu correo electrónico.</p>
+                    </div>
+                    <div class="content-block text-center">
+                        <a href="${ENVIRONMENT.URL_BACKEND + `/api/auth/verify-email?verify_email_token=${verify_email_token}`}" class="btn btn-primary">Verificar mi correo</a>
+                    </div>
+                    <div class="content-block" style="margin-top: 20px; font-size: 13px; color: #64748b;">
+                        <span>Si no reconoces este registro, puedes desestimar este correo con seguridad.</span>
+                    </div>
+                `, 'Verificación de correo')
             }
         )
 
@@ -153,12 +160,19 @@ class AuthService {
                 from: ENVIRONMENT.MAIL_USER,
                 to: email,
                 subject: "Restablecimiento de contraseña",
-                html: `
-                    <h1> Restablecimiento de contraseña</h1>
-                    <p>Has solicitado restablecer tu contraseña. Haz clic en el enlace para hacerlo</p>
-                    <a href="${ENVIRONMENT.URL_FRONTEND + `/reset-password/${reset_password_token}`}">Haz clic aquí para restablecer</a>
-                    <span>Si no reconoces este registro, desestima este correo.</span>
-                `
+                html: getEmailTemplate(`
+                    <div class="content-block">
+                        <h2>Restablecimiento de contraseña</h2>
+                        <p>Has solicitado restablecer tu contraseña para tu cuenta en <strong>Conecta</strong>.</p>
+                        <p>Haz clic en el siguiente botón para elegir una nueva contraseña:</p>
+                    </div>
+                    <div class="content-block text-center">
+                        <a href="${ENVIRONMENT.URL_FRONTEND + `/reset-password/${reset_password_token}`}" class="btn btn-primary">Restablecer contraseña</a>
+                    </div>
+                    <div class="content-block" style="margin-top: 20px; font-size: 13px; color: #64748b;">
+                        <span>Si no solicitaste este cambio, puedes ignorar este mensaje. Tu contraseña actual no cambiará.</span>
+                    </div>
+                `, 'Restablecimiento de contraseña')
             })
         } catch (error) {
             if (error instanceof ServerError) {

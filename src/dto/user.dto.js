@@ -6,7 +6,7 @@ class UserDTO {
         this.password = user.password
         this.created_at = user.created_at
         this.email_verified = user.email_verified
-
+        this.image = user.image
     }
 }
 
