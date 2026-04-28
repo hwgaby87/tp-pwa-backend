@@ -1,7 +1,8 @@
 import { Router } from 'express'
 import workspaceController from '../controllers/workspace.controller.js'
 import authMiddleware from '../middlewares/auth.middleware.js'
-import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
+import verifyWorkspaceMember from '../middlewares/verify-member-workspace.middleware.js'
+import verifyRole from '../middlewares/verify-role.middleware.js'
 import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
 import { validateWorkspaceCreate, validateWorkspaceUpdate, validateWorkspaceDelete } from '../middlewares/validators/workspace.validator.js'
 import channelRouter from './channel.route.js'
@@ -42,14 +43,15 @@ workspaceRouter.post(
 workspaceRouter.get(
     '/:workspace_id',
 
-    verifyMemberWorkspaceRoleMiddleware([]),
+    verifyWorkspaceMember,
     workspaceController.getById
 )
 
 
 workspaceRouter.put(
     '/:workspace_id',
-    verifyMemberWorkspaceRoleMiddleware(['admin', 'owner']),
+    verifyWorkspaceMember,
+    verifyRole('admin'),
     validateWorkspaceUpdate,
     handleValidationErrors,
     workspaceController.update
@@ -57,7 +59,8 @@ workspaceRouter.put(
 
 workspaceRouter.delete(
     '/:workspace_id',
-    verifyMemberWorkspaceRoleMiddleware(['owner']),
+    verifyWorkspaceMember,
+    verifyRole('owner'),
     validateWorkspaceDelete,
     handleValidationErrors,
     workspaceController.delete
@@ -65,7 +68,8 @@ workspaceRouter.delete(
 
 workspaceRouter.post(
     '/:workspace_id/restore',
-    verifyMemberWorkspaceRoleMiddleware(['owner']),
+    verifyWorkspaceMember,
+    verifyRole('owner'),
     workspaceController.restore
 )
 

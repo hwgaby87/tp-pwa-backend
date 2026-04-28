@@ -61,7 +61,7 @@ class MemberWorkspaceService {
     }
 
 
-    async updateMember(member_id, role) {
+    async updateMember(member_id, role, requesting_user_id) {
         try {
             if (!member_id || !role) {
                 throw new ServerError("Todos los campos son obligatorios", 400)
@@ -72,13 +72,31 @@ class MemberWorkspaceService {
                 throw new ServerError("Rol no válido", 400)
             }
 
+            const memberToUpdate = await workspaceMemberRepository.getById(member_id)
+            if (!memberToUpdate) {
+                throw new ServerError("El miembro no existe", 404)
+            }
+
+            const requestingMember = await workspaceMemberRepository.getByWorkspaceAndUserId(memberToUpdate.workspace_id, requesting_user_id)
+            
+            // Regla: ADMIN no puede degradar al creador (owner)
+            if (memberToUpdate.member_role === AVAILABLE_MEMBER_ROLES.OWNER && requestingMember.role !== AVAILABLE_MEMBER_ROLES.OWNER) {
+                throw new ServerError("No tenés permisos para degradar al propietario", 403)
+            }
+
+            // Regla: Solo el OWNER puede promover a otros a OWNER (si el sistema lo permite)
+            // Según el prompt: "ADMIN: Puede promover miembros a admin pero NO puede crear owners"
+            if (role === AVAILABLE_MEMBER_ROLES.OWNER && requestingMember.role !== AVAILABLE_MEMBER_ROLES.OWNER) {
+                throw new ServerError("Solo el propietario puede asignar el rol de propietario", 403)
+            }
+
             return await workspaceMemberRepository.updateRoleById(member_id, role)
         } catch (error) {
             throw error
         }
     }
 
-    async removeMember(member_id) {
+    async removeMember(member_id, requesting_user_id) {
         try {
             if (!member_id) {
                 throw new ServerError("El ID del miembro es obligatorio", 400)
@@ -89,9 +107,23 @@ class MemberWorkspaceService {
                 throw new ServerError("El miembro no existe", 404)
             }
 
-            const membersCount = await workspaceMemberRepository.countMembersByWorkspaceId(member.workspace_id)
-            if (membersCount <= 1) {
-                throw new ServerError("No se puede eliminar al último miembro del espacio de trabajo", 400)
+            const isSelfRemoval = member.user_id.toString() === requesting_user_id.toString()
+
+            // Regla: CREADOR (owner) no puede abandonar el workspace sin transferir ownership
+            if (isSelfRemoval && member.member_role === AVAILABLE_MEMBER_ROLES.OWNER) {
+                const membersCount = await workspaceMemberRepository.countMembersByWorkspaceId(member.workspace_id)
+                if (membersCount > 1) {
+                    throw new ServerError("No podés abandonar el workspace sin transferir la propiedad", 400)
+                }
+            }
+
+            // Regla: ADMIN no puede abandonar el workspace si es el último admin
+            if (isSelfRemoval && member.member_role === AVAILABLE_MEMBER_ROLES.ADMIN) {
+                const members = await workspaceMemberRepository.getMemberList(member.workspace_id)
+                const admins = members.filter(m => m.member_role === AVAILABLE_MEMBER_ROLES.ADMIN)
+                if (admins.length === 1) {
+                    throw new ServerError("No podés abandonar el workspace si sos el último administrador", 400)
+                }
             }
 
             return await workspaceMemberRepository.deleteById(member_id)

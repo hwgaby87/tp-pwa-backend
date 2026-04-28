@@ -52,7 +52,7 @@ class WorkspaceMemberController {
         const { memberId } = req.params
         const { role } = req.body
         try {
-            const member = await memberWorkspaceService.updateMember(memberId, role)
+            const member = await memberWorkspaceService.updateMember(memberId, role, req.user.id)
             res.status(200).json({
                 ok: true,
                 status: 200,
@@ -85,7 +85,7 @@ class WorkspaceMemberController {
     async removeMember(req, res, next) {
         const { memberId } = req.params
         try {
-            await memberWorkspaceService.removeMember(memberId)
+            await memberWorkspaceService.removeMember(memberId, req.user.id)
             res.status(200).json({
                 ok: true,
                 status: 200,

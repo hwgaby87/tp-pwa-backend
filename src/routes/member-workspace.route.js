@@ -1,7 +1,8 @@
 import express from 'express'
 import workspaceMemberController from '../controllers/workspace-member.controller.js'
-import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
-import available_member_roles from '../constants/member-roles.constant.js'
+import verifyWorkspaceMember from '../middlewares/verify-member-workspace.middleware.js'
+import verifyRole from '../middlewares/verify-role.middleware.js'
+import { AVAILABLE_MEMBER_ROLES } from '../constants/member-roles.constant.js'
 import authmiddleware from '../middlewares/auth.middleware.js'
 import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
 import { validateInviteMember, validateUpdateMember, validateRemoveMember } from '../middlewares/validators/member.validator.js'
@@ -9,13 +10,11 @@ import { validateInviteMember, validateUpdateMember, validateRemoveMember } from
 const memberWorkspaceRouter = express.Router({ mergeParams: true })
 
 memberWorkspaceRouter.use(authmiddleware)
-memberWorkspaceRouter.use(verifyMemberWorkspaceRoleMiddleware([]))
+memberWorkspaceRouter.use(verifyWorkspaceMember)
 
 memberWorkspaceRouter.post(
     '/',
-    verifyMemberWorkspaceRoleMiddleware(
-        [available_member_roles.OWNER, available_member_roles.ADMIN]
-    ),
+    verifyRole(AVAILABLE_MEMBER_ROLES.ADMIN),
     validateInviteMember,
     handleValidationErrors,
     workspaceMemberController.inviteMember
@@ -23,21 +22,17 @@ memberWorkspaceRouter.post(
 
 memberWorkspaceRouter.get(
     '/',
-    verifyMemberWorkspaceRoleMiddleware([]),
     workspaceMemberController.getMembers
 )
 
 memberWorkspaceRouter.get(
     '/:memberId',
-    verifyMemberWorkspaceRoleMiddleware([]),
     workspaceMemberController.getMemberById
 )
 
 memberWorkspaceRouter.put(
     '/:memberId',
-    verifyMemberWorkspaceRoleMiddleware(
-        [available_member_roles.OWNER, available_member_roles.ADMIN]
-    ),
+    verifyRole(AVAILABLE_MEMBER_ROLES.ADMIN),
     validateUpdateMember,
     handleValidationErrors,
     workspaceMemberController.updateMember
@@ -45,9 +40,7 @@ memberWorkspaceRouter.put(
 
 memberWorkspaceRouter.delete(
     '/:memberId',
-    verifyMemberWorkspaceRoleMiddleware(
-        [available_member_roles.OWNER, available_member_roles.ADMIN]
-    ),
+    verifyRole(AVAILABLE_MEMBER_ROLES.ADMIN),
     validateRemoveMember,
     handleValidationErrors,
     workspaceMemberController.removeMember

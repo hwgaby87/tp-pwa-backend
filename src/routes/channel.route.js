@@ -2,9 +2,10 @@ import express from 'express'
 import channelController from '../controllers/channel.controller.js'
 import messageRouter from './message.route.js'
 import verifyWorkspaceMiddleware from '../middlewares/verify-workspace.middleware.js'
-import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js'
+import verifyWorkspaceMember from '../middlewares/verify-member-workspace.middleware.js'
+import verifyRole from '../middlewares/verify-role.middleware.js'
 import verifyChannelMiddleware from '../middlewares/verify-channel.middleware.js'
-import available_member_roles from '../constants/member-roles.constant.js'
+import { AVAILABLE_MEMBER_ROLES } from '../constants/member-roles.constant.js'
 import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
 import { validateChannelCreate, validateChannelUpdate, validateChannelDelete, validateChannelRestore } from '../middlewares/validators/channel.validator.js'
 
@@ -14,7 +15,8 @@ channelRouter.use(verifyWorkspaceMiddleware)
 
 channelRouter.post(
     '/',
-    verifyMemberWorkspaceRoleMiddleware([available_member_roles.OWNER, available_member_roles.ADMIN]),
+    verifyWorkspaceMember,
+    verifyRole(AVAILABLE_MEMBER_ROLES.USER),
     validateChannelCreate,
     handleValidationErrors,
     channelController.create
@@ -22,19 +24,21 @@ channelRouter.post(
 
 channelRouter.get(
     '/',
-    verifyMemberWorkspaceRoleMiddleware(),
+    verifyWorkspaceMember,
     channelController.getAll
 )
 
 channelRouter.get(
     '/deleted',
-    verifyMemberWorkspaceRoleMiddleware([available_member_roles.OWNER, available_member_roles.ADMIN]),
+    verifyWorkspaceMember,
+    verifyRole(AVAILABLE_MEMBER_ROLES.ADMIN),
     channelController.getDeleted
 )
 
 channelRouter.delete(
     '/:channel_id',
-    verifyMemberWorkspaceRoleMiddleware([available_member_roles.OWNER, available_member_roles.ADMIN]),
+    verifyWorkspaceMember,
+    verifyRole(AVAILABLE_MEMBER_ROLES.ADMIN),
     validateChannelDelete,
     handleValidationErrors,
     verifyChannelMiddleware,
@@ -43,7 +47,8 @@ channelRouter.delete(
 
 channelRouter.post(
     '/:channel_id/restore',
-    verifyMemberWorkspaceRoleMiddleware([available_member_roles.OWNER, available_member_roles.ADMIN]),
+    verifyWorkspaceMember,
+    verifyRole(AVAILABLE_MEMBER_ROLES.ADMIN),
     validateChannelRestore,
     handleValidationErrors,
     channelController.restore
@@ -51,7 +56,8 @@ channelRouter.post(
 
 channelRouter.put(
     '/:channel_id',
-    verifyMemberWorkspaceRoleMiddleware([available_member_roles.OWNER, available_member_roles.ADMIN]),
+    verifyWorkspaceMember,
+    verifyRole(AVAILABLE_MEMBER_ROLES.USER),
     validateChannelUpdate,
     handleValidationErrors,
     verifyChannelMiddleware,

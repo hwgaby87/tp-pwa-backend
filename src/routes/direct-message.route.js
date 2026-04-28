@@ -2,13 +2,13 @@ import express from 'express';
 import directMessageController from '../controllers/direct-message.controller.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import verifyWorkspaceMiddleware from '../middlewares/verify-workspace.middleware.js';
-import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verify-member-workspace.middleware.js';
+import verifyWorkspaceMember from '../middlewares/verify-member-workspace.middleware.js';
 
 const directMessageRouter = express.Router({ mergeParams: true });
 
 directMessageRouter.use(authMiddleware);
 directMessageRouter.use(verifyWorkspaceMiddleware);
-directMessageRouter.use(verifyMemberWorkspaceRoleMiddleware());
+directMessageRouter.use(verifyWorkspaceMember);
 
 directMessageRouter.post('/:receiver_member_id', directMessageController.sendMessage);
 directMessageRouter.get('/:other_member_id', directMessageController.getConversation);
