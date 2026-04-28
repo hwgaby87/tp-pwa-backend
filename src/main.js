@@ -78,6 +78,8 @@ connectDB().then(() => {
         console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
 }).catch(err => {
-    // Si falla la conexión a la base de datos, mostramos el error y no arrancamos el servidor
+    // Si falla la conexión a sla base de datos, mostramos el error y no arrancamos el servidor
     console.error('Error al conectar a la base de datos:', err);
 });
+
+export default app;
