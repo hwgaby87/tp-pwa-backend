@@ -20,7 +20,7 @@ const app = express();
 
 // CORS permite que el frontend (que puede estar en otro dominio o puerto) se comunique con este backend
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.URL_FRONTEND,
     credentials: true
 }));
 
