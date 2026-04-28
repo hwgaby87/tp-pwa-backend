@@ -5,6 +5,7 @@ import ServerError from "../helpers/error.helper.js"
 import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constant.js"
 import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constant.js"
 import ENVIRONMENT from "../config/environment.config.js"
+import { getSuccessHTML, getErrorHTML } from "../helpers/html-response.helper.js"
 
 class WorkspaceController {
     async getWorkspaces(request, response, next) {
@@ -121,12 +122,17 @@ class WorkspaceController {
         try {
             const result = await memberWorkspaceService.respondToInvitation(token)
             
-            // Redireccionamos al frontend con un parámetro de éxito
-            const redirectUrl = `${ENVIRONMENT.URL_FRONTEND}/login?invitation_status=${result.workspace_member_accept_invitation}`
-            return res.redirect(redirectUrl)
+            const isAccepted = result.workspace_member_accept_invitation === AVAILABLE_INVITATION_RESPONSES.ACCEPTED
+            const title = isAccepted ? '¡Invitación Aceptada!' : 'Invitación Rechazada'
+            const message = isAccepted 
+                ? 'Te has unido correctamente al espacio de trabajo. Ya puedes empezar a colaborar con tu equipo.'
+                : 'Has rechazado la invitación al espacio de trabajo.'
+
+            return res.send(getSuccessHTML(title, message))
 
         } catch (error) {
-            next(error)
+            const errorMessage = error instanceof ServerError ? error.message : "El enlace de invitación es inválido o ha expirado."
+            return res.status(error.status || 500).send(getErrorHTML("Error en la Invitación", errorMessage))
         }
     }
 
