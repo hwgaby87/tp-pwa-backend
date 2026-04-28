@@ -138,7 +138,7 @@ const getSuccessHTML = (title, message) => {
             </div>
             <h1>${title}</h1>
             <p>${message}</p>
-            <a href="${ENVIRONMENT.URL_FRONTEND}/login" class="btn">Continuar al Acceso</a>
+            <a href="${ENVIRONMENT.URL_FRONTEND}" class="btn">Continuar al Acceso</a>
             <div class="footer">
                 &copy; ${new Date().getFullYear()} Slake App
             </div>
@@ -252,7 +252,7 @@ const getErrorHTML = (title, message) => {
             </div>
             <h1>${title}</h1>
             <p>${message}</p>
-            <a href="${ENVIRONMENT.URL_FRONTEND}/login" class="btn">Volver al Inicio</a>
+            <a href="${ENVIRONMENT.URL_FRONTEND}" class="btn">Volver al Inicio</a>
             <div class="footer">
                 &copy; ${new Date().getFullYear()} Slake App
             </div>
