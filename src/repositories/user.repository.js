@@ -102,7 +102,7 @@ class UserRepository {
             return user && new UserDTO(user)
         } catch (error) {
             console.error("Error en UserRepository.getByEmail:", error);
-            throw new ServerError("Error al buscar usuario por email", 500);
+            throw new ServerError(`Error al buscar usuario por email: ${error.message}`, 500);
         }
     }
 
