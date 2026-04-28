@@ -7,7 +7,12 @@ async function connectDB() {
         await mongoose.connect(ENVIRONMENT.MONGO_DB_CONECTION_STRING); // Conexión exitosa
         console.log('Conexión exitosa a la BD');
     } catch (error) {
-        console.log("Error de conexión", error); // Manejo de errores de conexión
+        console.error("=========================================");
+        console.error("ERROR DE CONEXIÓN A MONGO DB");
+        console.error("Mensaje:", error.message);
+        console.error("Código:", error.code);
+        console.error("Asegúrate de que tu IP esté permitida en MongoDB Atlas.");
+        console.error("=========================================");
     }
 }
 export default connectDB;

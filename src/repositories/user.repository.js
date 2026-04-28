@@ -22,6 +22,7 @@ class UserRepository {
                 password: password
             })
         } catch (error) {
+            console.error("Error en UserRepository.create:", error);
             // 11000 es el código de error de MongoDB para violación de clave única (ej: email repetido)
             if (error.code === 11000) 
             {   
@@ -40,6 +41,7 @@ class UserRepository {
         try {
             await User.findByIdAndDelete(user_id)
         } catch (error) {
+            console.error("Error en UserRepository.deleteById:", error);
             throw new ServerError("Error al eliminar el usuario", 500);
         }
     }
@@ -53,6 +55,7 @@ class UserRepository {
             const user = await User.findById(user_id)
             return user && new UserDTO(user)
         } catch (error) {
+            console.error("Error en UserRepository.getById:", error);
             throw new ServerError("Error al obtener el usuario", 500);
         }
     }
@@ -65,6 +68,7 @@ class UserRepository {
             const users = await User.find({}, '-password')
             return users.map(user => new UserDTO(user))
         } catch (error) {
+            console.error("Error en UserRepository.getAll:", error);
             throw new ServerError("Error al obtener los usuarios", 500);
         }
     }
@@ -81,6 +85,7 @@ class UserRepository {
             )
             return new_user && new UserDTO(new_user)
         } catch (error) {
+            console.error("Error en UserRepository.updateById:", error);
             if (error.code === 11000) {
                 throw new ServerError("Los datos proporcionados ya están en uso por otro usuario", 400);
             }
@@ -96,6 +101,7 @@ class UserRepository {
             const user = await User.findOne({ email: email })
             return user && new UserDTO(user)
         } catch (error) {
+            console.error("Error en UserRepository.getByEmail:", error);
             throw new ServerError("Error al buscar usuario por email", 500);
         }
     }
@@ -108,6 +114,7 @@ class UserRepository {
             const user = await User.findOne()
             return user && new UserDTO(user)
         } catch (error) {
+            console.error("Error en UserRepository.getUser:", error);
             throw new ServerError("Error al obtener usuario", 500);
         }
     }
@@ -120,6 +127,7 @@ class UserRepository {
             const user = await User.findOne({ name: name })
             return user && new UserDTO(user)
         } catch (error) {
+            console.error("Error en UserRepository.getByUsername:", error);
             throw new ServerError("Error al buscar usuario por nombre", 500);
         }
     }
