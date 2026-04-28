@@ -38,6 +38,19 @@ app.use((req, res, next) => {
 // Definición de Rutas (Endpoints)
 // ==========================================
 
+// Ruta raíz para verificar que la API está en línea y evitar errores 404 en los logs de Vercel
+app.get('/', (req, res) => {
+    res.json({
+        ok: true,
+        message: 'Bienvenido a la API de Conecta',
+        status: 'online',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Manejo de favicon para evitar ruidos en los logs
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 // Todas las peticiones que empiecen con '/api/auth' serán manejadas por authRouter
 app.use('/api/auth', authRouter);
 
