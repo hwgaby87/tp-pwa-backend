@@ -4,6 +4,7 @@ import workspaceService from "../services/workspace.service.js"
 import ServerError from "../helpers/error.helper.js"
 import AVAILABLE_MEMBER_ROLES from "../constants/member-roles.constant.js"
 import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.constant.js"
+import ENVIRONMENT from "../config/environment.config.js"
 
 class WorkspaceController {
     async getWorkspaces(request, response, next) {
@@ -119,13 +120,11 @@ class WorkspaceController {
         const { token } = req.query
         try {
             const result = await memberWorkspaceService.respondToInvitation(token)
-            const statusMessage = result.workspace_member_accept_invitation === AVAILABLE_INVITATION_RESPONSES.ACCEPTED ? 'aceptada' : 'rechazada';
-            res.status(200).json({
-                ok: true,
-                status: 200,
-                message: `Invitación ${statusMessage} con éxito`,
-                data: result
-            })
+            
+            // Redireccionamos al frontend con un parámetro de éxito
+            const redirectUrl = `${ENVIRONMENT.URL_FRONTEND}/login?invitation_status=${result.workspace_member_accept_invitation}`
+            return res.redirect(redirectUrl)
+
         } catch (error) {
             next(error)
         }

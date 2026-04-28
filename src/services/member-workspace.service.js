@@ -172,8 +172,8 @@ class MemberWorkspaceService {
             { expiresIn: '7d' }
         )
 
-        const accept_link = `${ENVIRONMENT.URL_FRONTEND}/invitation?token=${accept_token}`
-        const reject_link = `${ENVIRONMENT.URL_FRONTEND}/invitation?token=${reject_token}`
+        const accept_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/respond-invitation?token=${accept_token}`
+        const reject_link = `${ENVIRONMENT.URL_BACKEND}/api/workspaces/respond-invitation?token=${reject_token}`
 
         await mailerTransporter.sendMail({
             from: ENVIRONMENT.MAIL_USER,
