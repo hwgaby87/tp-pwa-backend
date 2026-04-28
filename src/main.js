@@ -68,18 +68,18 @@ app.use(errorHandlerMiddleware);
 // Arranque del Servidor y Conexión a Base de Datos
 // ==========================================
 
-// Define el puerto, usando el de la variable de entorno o el 8080 por defecto
-const PORT = process.env.PORT || 8080;
-
-// Primero intenta conectarse a la base de datos MongoDB
-connectDB().then(() => {
-    // Si la conexión es exitosa, arranca el servidor web para escuchar peticiones
-    app.listen(PORT, () => {
-        console.log(`Servidor escuchando en el puerto ${PORT}`);
-    });
-}).catch(err => {
-    // Si falla la conexión a sla base de datos, mostramos el error y no arrancamos el servidor
+// Conectamos a la DB al iniciar (sin bloquear el export)
+connectDB().catch(err => {
     console.error('Error al conectar a la base de datos:', err);
 });
 
+// En entorno local, levantamos el servidor normalmente
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => {
+        console.log(`Servidor escuchando en el puerto ${PORT}`);
+    });
+}
+
+// Vercel necesita el export default para manejar las requests
 export default app;
