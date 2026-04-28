@@ -1,4 +1,4 @@
-const getEmailTemplate = (content, title = 'Conecta App') => {
+const getEmailTemplate = (content, title = 'CONECTA') => {
     return `
     <!DOCTYPE html>
     <html lang="es">
@@ -116,7 +116,7 @@ const getEmailTemplate = (content, title = 'Conecta App') => {
                 ${content}
             </div>
             <div class="email-footer">
-                &copy; ${new Date().getFullYear()} Conecta App. Todos los derechos reservados.
+                &copy; ${new Date().getFullYear()} CONECTA. Todos los derechos reservados.
                 <br>
                 Este es un mensaje automático, por favor no respondas a este correo.
             </div>

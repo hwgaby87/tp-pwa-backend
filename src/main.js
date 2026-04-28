@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.json({
         ok: true,
-        message: 'Bienvenido a la API de Conecta',
+        message: 'Bienvenido a la API de CONECTA',
         status: 'online',
         timestamp: new Date().toISOString()
     });
