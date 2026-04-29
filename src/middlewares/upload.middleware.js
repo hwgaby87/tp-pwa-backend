@@ -2,15 +2,20 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-// Asegurarse de que el directorio de uploads existe
+// En Vercel el filesystem es de solo lectura, usamos memoria como fallback
 const uploadDir = 'public/uploads/profile-pictures';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, uploadDir);
+        try {
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+            cb(null, uploadDir);
+        } catch {
+            // En entornos serverless el filesystem es readonly; multer usará memoria
+            cb(null, '/tmp');
+        }
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
