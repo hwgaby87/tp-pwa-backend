@@ -27,6 +27,9 @@ app.use(cors({
 // Permite a la aplicación entender los datos enviados en formato JSON en el cuerpo (body) de las peticiones
 app.use(express.json());
 
+// Servir archivos estáticos desde la carpeta 'public'
+app.use('/public', express.static('public'));
+
 // Middleware para registrar (loguear) todas las peticiones entrantes en la consola
 // Muy útil para saber qué rutas se están consultando y con qué método (GET, POST, etc.)
 app.use((req, res, next) => {

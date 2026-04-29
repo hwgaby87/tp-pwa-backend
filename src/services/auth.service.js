@@ -103,6 +103,24 @@ class AuthService {
     }
 
     /**
+     * Genera un token JWT para un usuario.
+     * @param {Object} user - El objeto usuario de la base de datos.
+     * @returns {string} Token JWT.
+     */
+    generateToken(user) {
+        return jwt.sign(
+            {
+                email: user.email,
+                name: user.name,
+                id: user._id,
+                image: user.image || '',
+                created_at: user.created_at
+            },
+            ENVIRONMENT.JWT_SECRET_KEY
+        );
+    }
+
+    /**
      * Autentica al usuario verificando su email y contraseña.
      */
     async login({ email, password }) {
@@ -124,17 +142,7 @@ class AuthService {
         }
 
         // Si todo es correcto, generamos un token JWT de autorización (auth_token)
-        // Este token identificará al usuario en futuras peticiones y se guardará en su navegador/dispositivo.
-        const auth_token = jwt.sign(
-            {
-                email: user.email,
-                name: user.name,
-                id: user._id,
-                created_at: user.created_at
-            },
-            ENVIRONMENT.JWT_SECRET_KEY
-        )
-        return auth_token
+        return this.generateToken(user);
     }
 
 
