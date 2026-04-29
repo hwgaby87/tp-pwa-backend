@@ -12,6 +12,7 @@ class DirectMessageController {
      * @param {Object} req - Petición con workspace_id, receiver_member_id en params y content en body.
      * @param {Object} res - Respuesta con el mensaje creado.
      * @param {Function} next - Middleware next.
+     */
     async sendMessage(req, res, next) {
         try {
             const { workspace_id, receiver_member_id } = req.params;

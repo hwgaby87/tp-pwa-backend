@@ -14,6 +14,7 @@ class UserController {
      * @param {Object} req - Petición de Express.
      * @param {Object} res - Respuesta de Express.
      * @param {Function} next - Middleware next.
+     */
     async listUsers(req, res, next) {
         try {
             const users = await userService.getAllUsers();

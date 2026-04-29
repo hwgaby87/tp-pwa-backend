@@ -12,6 +12,7 @@ class ChannelController {
      * @param {Object} req - Petición con workspace_id en params y name/description en body.
      * @param {Object} res - Respuesta con el canal creado.
      * @param {Function} next - Middleware next.
+     */
     async create(req, res, next) {
         try {
             const { workspace_id } = req.params
