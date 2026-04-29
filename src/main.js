@@ -19,8 +19,24 @@ const app = express();
 // ==========================================
 
 // CORS permite que el frontend (que puede estar en otro dominio o puerto) se comunique con este backend
+// Se aceptan múltiples orígenes separados por coma en la variable de entorno URL_FRONTEND
+const allowedOrigins = [
+    'https://tp-utn-pwa-web.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    ...(process.env.URL_FRONTEND ? process.env.URL_FRONTEND.split(',').map(o => o.trim()) : [])
+];
+
 app.use(cors({
-    origin: process.env.URL_FRONTEND,
+    origin: (origin, callback) => {
+        // Permitir requests sin origin (ej: Postman, curl) o con origin en la lista
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.warn(`[CORS] Origin bloqueado: ${origin}`);
+            callback(new Error(`CORS: origen no permitido → ${origin}`));
+        }
+    },
     credentials: true
 }));
 
