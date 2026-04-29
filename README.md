@@ -205,44 +205,79 @@ La API utiliza **JSON Web Tokens (JWT)** para proteger los recursos. Para accede
 
 ## 🛰️ Documentación de Endpoints
 
+### 🏥 Health Check (Estado del Sistema)
+| Método | Ruta | Descripción | Auth |
+| :--- | :--- | :--- | :---: |
+| GET | `/api/health` | Verifica la conexión con la base de datos. | ❌ |
+| GET | `/api/health/page` | Página HTML simple de estado. | ❌ |
+| GET | `/api/health/database` | Detalle del estado de la conexión a DB. | ❌ |
+
 ### 🔐 Autenticación (Auth)
 | Método | Ruta | Descripción | Auth |
 | :--- | :--- | :--- | :---: |
-| POST | `/api/auth/register` | Registra un nuevo usuario en el sistema. | ❌ |
-| POST | `/api/auth/login` | Autentica un usuario y devuelve un token JWT. | ❌ |
-| POST | `/api/auth/reset-password-request` | Envía un correo con un link de recuperación. | ❌ |
-| POST | `/api/auth/reset-password/:token` | Establece una nueva contraseña usando el token. | ❌ |
+| POST | `/api/auth/register` | Registra un nuevo usuario. | ❌ |
+| POST | `/api/auth/login` | Autentica y devuelve un token JWT. | ❌ |
+| POST | `/api/auth/reset-password-request` | Solicita recuperación de contraseña. | ❌ |
+| POST | `/api/auth/reset-password/:token` | Establece nueva contraseña con token. | ❌ |
 
 ### 🏢 Espacios de Trabajo (Workspaces)
 | Método | Ruta | Descripción | Auth |
 | :--- | :--- | :--- | :---: |
-| GET | `/api/workspaces` | Obtiene los espacios donde el usuario es miembro. | ✅ |
-| POST | `/api/workspaces` | Crea un nuevo espacio de trabajo. | ✅ |
-| GET | `/api/workspaces/:workspace_id` | Obtiene el detalle y miembros de un espacio. | ✅ |
-| PUT | `/api/workspaces/:workspace_id` | Actualiza datos del espacio (Admin/Owner). | ✅ |
-| POST | `/api/workspaces/:workspace_id/image` | Sube imagen del workspace (Multipart/Form). | ✅ |
+| GET | `/api/workspaces` | Lista espacios activos del usuario. | ✅ |
+| GET | `/api/workspaces/archived` | Lista espacios archivados. | ✅ |
+| POST | `/api/workspaces` | Crea un nuevo espacio. | ✅ |
+| GET | `/api/workspaces/:id` | Detalle de un espacio específico. | ✅ |
+| PUT | `/api/workspaces/:id` | Actualiza datos (Admin/Owner). | ✅ |
+| DELETE | `/api/workspaces/:id` | Archiva un espacio (Owner). | ✅ |
+| POST | `/api/workspaces/:id/restore` | Restaura un espacio archivado (Owner). | ✅ |
+| POST | `/api/workspaces/:id/image` | Sube/Actualiza imagen (Multipart). | ✅ |
+| DELETE | `/api/workspaces/:id/image` | Elimina la imagen del espacio. | ✅ |
+
+### 👥 Miembros de Espacio (Workspace Members)
+| Método | Ruta | Descripción | Auth |
+| :--- | :--- | :--- | :---: |
+| GET | `/api/workspaces/:id/members` | Lista todos los miembros del espacio. | ✅ |
+| GET | `/api/workspaces/:id/members/:m_id` | Detalle de un miembro específico. | ✅ |
+| POST | `/api/workspaces/:id/members` | Invita a un nuevo miembro (Admin). | ✅ |
+| PUT | `/api/workspaces/:id/members/:m_id` | Actualiza rol/estado de miembro (Admin). | ✅ |
+| DELETE | `/api/workspaces/:id/members/:m_id` | Elimina a un miembro del espacio (Admin). | ✅ |
 
 ### 📢 Canales (Channels)
 | Método | Ruta | Descripción | Auth |
 | :--- | :--- | :--- | :---: |
-| GET | `/api/workspaces/:workspace_id/channels` | Lista los canales activos del espacio. | ✅ |
-| POST | `/api/workspaces/:workspace_id/channels` | Crea un canal en el espacio indicado. | ✅ |
-| PUT | `/api/workspaces/:workspace_id/channels/:channel_id` | Actualiza la información del canal. | ✅ |
-| DELETE | `/api/workspaces/:workspace_id/channels/:channel_id` | Archiva un canal (borrado lógico). | ✅ |
+| GET | `/api/workspaces/:id/channels` | Lista canales activos del espacio. | ✅ |
+| GET | `/api/workspaces/:id/channels/deleted` | Lista canales eliminados (Admin). | ✅ |
+| POST | `/api/workspaces/:id/channels` | Crea un canal (Cualquier miembro). | ✅ |
+| PUT | `/api/workspaces/:id/channels/:c_id` | Actualiza información del canal. | ✅ |
+| DELETE | `/api/workspaces/:id/channels/:c_id` | Elimina un canal (Admin). | ✅ |
+| POST | `/api/workspaces/:id/channels/:c_id/restore` | Restaura un canal eliminado (Admin). | ✅ |
 
-### 💬 Mensajes (Messages)
+### 💬 Mensajes de Canal (Channel Messages)
 | Método | Ruta | Descripción | Auth |
 | :--- | :--- | :--- | :---: |
-| GET | `.../channels/:channel_id/messages` | Obtiene el historial de mensajes del canal. | ✅ |
-| POST | `.../channels/:channel_id/messages` | Envía un nuevo mensaje al canal. | ✅ |
-| DELETE | `.../messages/:message_id` | Elimina un mensaje propio. | ✅ |
+| GET | `/api/workspaces/:id/channels/:c_id/messages` | Obtiene historial de mensajes. | ✅ |
+| POST | `/api/workspaces/:id/channels/:c_id/messages` | Envía un nuevo mensaje. | ✅ |
+| PUT | `/api/workspaces/:id/channels/:c_id/messages/:m_id/read` | Marca mensaje como leído. | ✅ |
+| PUT | `/api/workspaces/:id/channels/:c_id/messages/:m_id/received` | Marca como entregado. | ✅ |
+| DELETE | `/api/workspaces/:id/channels/:c_id/messages/:m_id` | Elimina un mensaje (Autor). | ✅ |
+
+### ✉️ Mensajes Directos (Direct Messages)
+| Método | Ruta | Descripción | Auth |
+| :--- | :--- | :--- | :---: |
+| GET | `/api/workspaces/:id/direct-messages/:other_id` | Obtiene chat con otro miembro. | ✅ |
+| POST | `/api/workspaces/:id/direct-messages/:receiver_id` | Envía mensaje directo. | ✅ |
+| PUT | `/api/workspaces/:id/direct-messages/:m_id/read` | Marca DM como leído. | ✅ |
+| PUT | `/api/workspaces/:id/direct-messages/:m_id/received` | Marca DM como entregado. | ✅ |
+| DELETE | `/api/workspaces/:id/direct-messages/:m_id` | Elimina un DM (Autor). | ✅ |
 
 ### 👤 Usuarios (Users)
 | Método | Ruta | Descripción | Auth |
 | :--- | :--- | :--- | :---: |
-| GET | `/api/users` | Lista todos los usuarios (solo Admin). | ✅ |
-| PUT | `/api/users` | Actualiza el perfil del usuario autenticado. | ✅ |
-| POST | `/api/users/profile/image` | Actualiza la foto de perfil en Cloudinary. | ✅ |
+| GET | `/api/users` | Lista usuarios (solo Admin). | ✅ |
+| GET | `/api/users/:id` | Obtiene perfil de un usuario. | ✅ |
+| PUT | `/api/users` | Actualiza perfil propio. | ✅ |
+| POST | `/api/users/profile-picture` | Sube foto de perfil (Multipart). | ✅ |
+| DELETE | `/api/users/:id` | Elimina un usuario (solo Admin). | ✅ |
 
 ---
 
