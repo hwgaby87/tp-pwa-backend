@@ -1,25 +1,21 @@
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import cloudinary from '../config/cloudinary.config.js';
 
-// En Vercel el filesystem es de solo lectura, usamos memoria como fallback
-const uploadDir = 'public/uploads/profile-pictures';
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        try {
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            }
-            cb(null, uploadDir);
-        } catch {
-            // En entornos serverless el filesystem es readonly; multer usará memoria
-            cb(null, '/tmp');
-        }
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'profile-' + uniqueSuffix + path.extname(file.originalname));
+/**
+ * Almacenamiento en Cloudinary.
+ * Las imágenes se suben directamente a la nube — no se escriben en disco local.
+ * Esto es compatible con entornos serverless como Vercel.
+ */
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'conecta/profile-pictures',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+        transformation: [
+            { width: 400, height: 400, crop: 'fill', gravity: 'face' },
+            { quality: 'auto', fetch_format: 'auto' }
+        ]
     }
 });
 

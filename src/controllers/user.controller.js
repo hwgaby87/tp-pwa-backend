@@ -69,10 +69,11 @@ class UserController {
             }
 
             const userId = req.user.id;
-            const filePath = `/public/uploads/profile-pictures/${req.file.filename}`;
+            // Con Cloudinary, req.file.path contiene la URL pública de la imagen
+            const imageUrl = req.file.path;
             
-            // Actualizar el usuario con la nueva ruta de la imagen
-            const updatedUser = await userService.updateUserById(userId, { image: filePath });
+            // Actualizar el usuario con la nueva URL de la imagen
+            const updatedUser = await userService.updateUserById(userId, { image: imageUrl });
 
             // Generar un nuevo token que incluya la nueva imagen
             const newToken = authService.generateToken(updatedUser);
