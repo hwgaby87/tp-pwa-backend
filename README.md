@@ -4,7 +4,7 @@ Este es el backend de **Conecta**, una plataforma de comunicación en tiempo rea
 
 La aplicación permite gestionar espacios de trabajo, canales, mensajería directa y un sistema robusto de roles y permisos.
 
-## 🚀 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 *   **Entorno de ejecución:** [Node.js](https://nodejs.org/)
 *   **Framework Web:** [Express.js](https://expressjs.com/)
@@ -14,7 +14,7 @@ La aplicación permite gestionar espacios de trabajo, canales, mensajería direc
 *   **Validación:** [Express-validator](https://express-validator.github.io/docs/)
 *   **CORS:** Habilitado para integración con el frontend.
 
-## ✨ Funcionalidades Principales
+## Funcionalidades Principales
 
 *   **Autenticación y Seguridad:**
     *   Registro de usuarios con validación de datos.
@@ -34,7 +34,7 @@ La aplicación permite gestionar espacios de trabajo, canales, mensajería direc
 *   **Perfil de Usuario:**
     *   Gestión de datos personales y visualización de perfiles.
 
-## 🛠️ Instalación y Configuración
+## Instalación y Configuración
 
 Sigue estos pasos para ejecutar el proyecto localmente:
 
@@ -68,7 +68,7 @@ Sigue estos pasos para ejecutar el proyecto localmente:
 
 El servidor estará disponible en `http://localhost:8080`.
 
-## 📂 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```text
 src/
@@ -85,16 +85,16 @@ src/
 └── main.js         # Punto de entrada de la aplicación
 ```
 
-## 📖 Documentación de Endpoints
+## Documentación de Endpoints
 
-### 🔐 Autenticación (`/api/auth`)
+### Autenticación (`/api/auth`)
 *   `POST /register`: Registra un nuevo usuario.
 *   `POST /login`: Inicia sesión y devuelve un token JWT.
 *   `GET /verify-email`: Verifica el correo del usuario (usado desde el email).
 *   `POST /reset-password-request`: Solicita recuperación de contraseña.
 *   `POST /reset-password/:reset_password_token`: Establece una nueva contraseña.
 
-### 🏢 Workspaces (`/api/workspaces`)
+### Workspaces (`/api/workspaces`)
 *   `GET /`: Lista los workspaces del usuario autenticado.
 *   `POST /`: Crea un nuevo workspace.
 *   `GET /:workspace_id`: Obtiene detalles de un workspace específico.
@@ -103,29 +103,29 @@ src/
 *   `POST /:workspace_id/restore`: Restaura un workspace archivado (Owner).
 *   `GET /respond-invitation`: Procesa la respuesta a una invitación.
 
-### 💬 Canales (`/api/workspaces/:workspace_id/channels`)
+### Canales (`/api/workspaces/:workspace_id/channels`)
 *   `GET /`: Lista todos los canales del workspace.
 *   `POST /`: Crea un nuevo canal (Admin/User).
 *   `PUT /:channel_id`: Actualiza un canal.
 *   `DELETE /:channel_id`: Elimina un canal (Admin).
 
-### 📧 Mensajes de Canal (`/api/workspaces/:workspace_id/channels/:channel_id/messages`)
+### Mensajes de Canal (`/api/workspaces/:workspace_id/channels/:channel_id/messages`)
 *   `GET /`: Obtiene los mensajes del canal.
 *   `POST /`: Envía un mensaje al canal.
 *   `PUT /:message_id/read`: Marca un mensaje como leído.
 *   `DELETE /:message_id`: Elimina un mensaje.
 
-### 👥 Miembros (`/api/workspaces/:workspace_id/members`)
+### Miembros (`/api/workspaces/:workspace_id/members`)
 *   `GET /`: Lista los miembros del workspace.
 *   `POST /`: Invita a un nuevo miembro (Admin).
 *   `PUT /:memberId`: Actualiza el rol de un miembro (Admin).
 *   `DELETE /:memberId`: Elimina a un miembro del workspace (Admin).
 
-### ✉️ Mensajes Directos (`/api/workspaces/:workspace_id/direct-messages`)
+### Mensajes Directos (`/api/workspaces/:workspace_id/direct-messages`)
 *   `GET /:other_member_id`: Obtiene la conversación con otro miembro.
 *   `POST /:receiver_member_id`: Envía un mensaje directo.
 
-### 👤 Usuarios (`/api/users`)
+### Usuarios (`/api/users`)
 *   `GET /`: Lista usuarios (requiere auth).
 *   `GET /:id`: Obtiene datos de un usuario.
 *   `PUT /`: Actualiza perfil del usuario actual.
