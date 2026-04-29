@@ -13,6 +13,7 @@ class UserService {
      * Obtiene todos los usuarios del sistema.
      * @returns {Promise<Array>} Lista de usuarios.
      */
+    async listUsers() {
         try {
             return await userRepository.getAll();
         } catch (error) {
