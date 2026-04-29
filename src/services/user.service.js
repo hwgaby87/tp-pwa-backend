@@ -1,9 +1,18 @@
+/**
+ * @file user.service.js
+ * @description Servicio de lógica de negocio para la gestión de usuarios.
+ * Interactúa con los repositorios para realizar validaciones antes de persistir datos.
+ */
+
 import userRepository from "../repositories/user.repository.js";
 import workspaceMemberRepository from "../repositories/member.repository.js";
 import ServerError from "../helpers/error.helper.js";
 
 class UserService {
-    async getAllUsers() {
+    /**
+     * Obtiene todos los usuarios del sistema.
+     * @returns {Promise<Array>} Lista de usuarios.
+     */
         try {
             return await userRepository.getAll();
         } catch (error) {
@@ -11,6 +20,11 @@ class UserService {
         }
     }
 
+    /**
+     * Obtiene un usuario por su ID.
+     * @param {string} userId - ID del usuario.
+     * @returns {Promise<Object>} El usuario encontrado.
+     */
     async getUserById(userId) {
         if (!userId) {
             throw new ServerError("El ID del usuario es obligatorio", 400);
@@ -27,6 +41,11 @@ class UserService {
         }
     }
 
+    /**
+     * Elimina un usuario verificando restricciones (ej: si es único miembro de un WS).
+     * @param {string} userId - ID del usuario.
+     * @returns {Promise<Object>} Mensaje de éxito.
+     */
     async deleteUserById(userId) {
         if (!userId) {
             throw new ServerError("El ID del usuario es obligatorio", 400);
@@ -55,6 +74,12 @@ class UserService {
         }
     }
 
+    /**
+     * Actualiza las propiedades de un usuario.
+     * @param {string} userId - ID del usuario.
+     * @param {Object} newUserProps - Propiedades a actualizar.
+     * @returns {Promise<Object>} El usuario actualizado.
+     */
     async updateUserById(userId, newUserProps) {
         if (!userId) {
             throw new ServerError("El ID del usuario es obligatorio", 400);

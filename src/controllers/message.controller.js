@@ -1,6 +1,19 @@
+/**
+ * @file message.controller.js
+ * @description Controlador para la gestión de mensajes en canales públicos.
+ * Maneja el envío, recuperación, marcado de lectura/recepción y eliminación de mensajes de canales.
+ */
+
 import messageService from "../services/message.service.js";
 
 class MessageController {
+    /**
+     * Envía un mensaje a un canal específico.
+     * @param {Object} req - Petición con workspace_id, channel_id en params y content en body.
+     * @param {Object} res - Respuesta con el mensaje creado.
+     * @param {Function} next - Middleware next.
+     * */
+
     async sendMessage(req, res, next) {
         try {
             const { workspace_id, channel_id } = req.params;
@@ -20,6 +33,12 @@ class MessageController {
         }
     }
 
+    /**
+     * Obtiene todos los mensajes de un canal específico.
+     * @param {Object} req - Petición con channel_id en params.
+     * @param {Object} res - Respuesta con la lista de mensajes.
+     * @param {Function} next - Middleware next.
+     */
     async getMessages(req, res, next) {
         try {
             const { channel_id } = req.params;
@@ -36,6 +55,12 @@ class MessageController {
         }
     }
 
+    /**
+     * Marca un mensaje de canal como leído.
+     * @param {Object} req - Petición con message_id en params.
+     * @param {Object} res - Respuesta con el mensaje actualizado.
+     * @param {Function} next - Middleware next.
+     */
     async markAsRead(req, res, next) {
         try {
             const { message_id } = req.params;
@@ -52,6 +77,12 @@ class MessageController {
         }
     }
 
+    /**
+     * Marca un mensaje de canal como recibido.
+     * @param {Object} req - Petición con message_id en params.
+     * @param {Object} res - Respuesta con el mensaje actualizado.
+     * @param {Function} next - Middleware next.
+     */
     async markAsReceived(req, res, next) {
         try {
             const { message_id } = req.params;
@@ -68,6 +99,12 @@ class MessageController {
         }
     }
 
+    /**
+     * Elimina un mensaje de canal (solo si el usuario actual es el autor).
+     * @param {Object} req - Petición con message_id en params.
+     * @param {Object} res - Respuesta confirmando la eliminación.
+     * @param {Function} next - Middleware next.
+     */
     async deleteMessage(req, res, next) {
         try {
             const { message_id } = req.params;

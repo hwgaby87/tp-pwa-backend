@@ -1,3 +1,9 @@
+/**
+ * @file channel.repository.js
+ * @description Repositorio para la gestión de persistencia de Canales.
+ * Incluye operaciones para el CRUD de canales, borrado lógico y restauración.
+ */
+
 import ChannelDTO from "../dtos/channel.dto.js"
 import ChannelModel from "../models/channel.model.js"
 import ServerError from "../helpers/error.helper.js"

@@ -1,3 +1,9 @@
+/**
+ * @file workspace-member.model.js
+ * @description Esquema de Mongoose para la relación de membresía entre Usuarios y Espacios de Trabajo.
+ * Define roles, estados de invitación y vincula las colecciones correspondientes.
+ */
+
 import mongoose from "mongoose";
 import available_invitation_responses from "../constants/invitation-responses.constant.js";
 import available_member_roles from "../constants/member-roles.constant.js";

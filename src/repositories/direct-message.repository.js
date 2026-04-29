@@ -1,3 +1,9 @@
+/**
+ * @file direct-message.repository.js
+ * @description Repositorio para la gestión de persistencia de Mensajes Directos.
+ * Maneja el envío de DMs, recuperación de conversaciones y actualización de estados.
+ */
+
 import DirectMessageModel from "../models/direct-message.model.js"
 import DirectMessageDTO from "../dtos/direct-message.dto.js"
 import ServerError from "../helpers/error.helper.js"
@@ -33,7 +39,7 @@ class DirectMessageRepository {
                     path: 'fk_id_sender',
                     populate: {
                         path: 'fk_id_user',
-                        select: 'name'
+                        select: 'name image'
                     }
                 })
                 .sort({ created_at: 1 })
@@ -43,7 +49,8 @@ class DirectMessageRepository {
                 return {
                     ...dto,
                     user_name: msg.fk_id_sender?.fk_id_user?.name || 'Usuario',
-                    user_id: msg.fk_id_sender?.fk_id_user?._id
+                    user_id: msg.fk_id_sender?.fk_id_user?._id,
+                    user_image: msg.fk_id_sender?.fk_id_user?.image
                 };
             });
         } catch (error) {

@@ -1,3 +1,9 @@
+/**
+ * @file upload.middleware.js
+ * @description Middleware para la gestión de carga de archivos (imágenes) utilizando Multer y Cloudinary.
+ * Define diferentes configuraciones de almacenamiento para fotos de perfil y fotos de espacios de trabajo.
+ */
+
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../config/cloudinary.config.js';

@@ -3,12 +3,12 @@ import UserDTO from "../dtos/user.dto.js"
 import ServerError from "../helpers/error.helper.js"
 
 /**
- * UserRepository
- * El patrón "Repositorio" se utiliza para aislar a la capa de servicios de los
- * detalles concretos de la base de datos (MongoDB/Mongoose en este caso).
- * Todas las consultas (guardar, buscar, eliminar, actualizar) a la tabla de
- * usuarios se centralizan aquí.
+ * @file user.repository.js
+ * @description Repositorio para la gestión de persistencia de usuarios en MongoDB.
+ * Centraliza todas las consultas a la colección de usuarios, abstrayendo a los servicios 
+ * de los detalles de Mongoose.
  */
+
 class UserRepository {
 
     /**

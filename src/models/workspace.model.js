@@ -1,3 +1,9 @@
+/**
+ * @file workspace.model.js
+ * @description Esquema de Mongoose para la colección de Espacios de Trabajo (Workspaces).
+ * Define la estructura de los entornos donde los usuarios colaboran.
+ */
+
 import mongoose from "mongoose";
 
 const workspaceSchema = new mongoose.Schema({

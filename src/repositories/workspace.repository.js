@@ -1,3 +1,9 @@
+/**
+ * @file workspace.repository.js
+ * @description Repositorio para la gestión de persistencia de Espacios de Trabajo (Workspaces).
+ * Maneja las operaciones de creación, búsqueda, actualización y borrado lógico en MongoDB.
+ */
+
 import WorkspaceModel from "../models/workspace.model.js";
 import WorkspaceDTO from "../dtos/workspace.dto.js";
 import ServerError from "../helpers/error.helper.js";

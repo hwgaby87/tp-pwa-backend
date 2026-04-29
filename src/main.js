@@ -1,3 +1,9 @@
+/**
+ * @file main.js
+ * @description Punto de entrada principal del servidor de la API de Conecta.
+ * Configura Express, middlewares globales, rutas y la conexión a la base de datos.
+ */
+
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';

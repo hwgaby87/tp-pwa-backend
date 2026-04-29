@@ -7,7 +7,20 @@ import AVAILABLE_INVITATION_RESPONSES from "../constants/invitation-responses.co
 import ENVIRONMENT from "../config/environment.config.js"
 import { getSuccessHTML, getErrorHTML } from "../helpers/html-response.helper.js"
 
+/**
+ * @file workspace.controller.js
+ * @description Controlador para la gestión de espacios de trabajo (Workspaces).
+ * Maneja las peticiones para obtener, crear, actualizar, archivar y restaurar workspaces,
+ * así como la gestión de sus imágenes y la respuesta a invitaciones.
+ */
+
 class WorkspaceController {
+    /**
+     * Obtiene todos los espacios de trabajo en los que el usuario es miembro.
+     * @param {Object} request - Objeto de petición de Express.
+     * @param {Object} response - Objeto de respuesta de Express.
+     * @param {Function} next - Función para pasar el control al siguiente middleware.
+     */
     async getWorkspaces(request, response, next) {
         try {
             //Cliente consultante
@@ -31,6 +44,12 @@ class WorkspaceController {
         }
     }
 
+    /**
+     * Obtiene los espacios de trabajo que han sido archivados (inactivos).
+     * @param {Object} request - Objeto de petición.
+     * @param {Object} response - Objeto de respuesta.
+     * @param {Function} next - Función next.
+     */
     async getArchivedWorkspaces(request, response, next) {
         try {
             const user = request.user
@@ -51,6 +70,12 @@ class WorkspaceController {
         }
     }
 
+    /**
+     * Crea un nuevo espacio de trabajo.
+     * @param {Object} request - Objeto de petición con title y description en el body.
+     * @param {Object} response - Objeto de respuesta.
+     * @param {Function} next - Función next.
+     */
     async create(request, response, next) {
         try {
             const { title, description } = request.body
@@ -72,6 +97,13 @@ class WorkspaceController {
         }
     }
 
+    /**
+     * Obtiene los detalles de un espacio de trabajo por su ID.
+     * @param {Object} req - Objeto de petición con workspace_id en params.
+     * @param {Object} res - Objeto de respuesta.
+     * @param {Function} next - Función next.
+     */
+
     async getById(req, res, next) {
         const { workspace_id } = req.params
         try {
@@ -92,6 +124,12 @@ class WorkspaceController {
             next(error)
         }
     }
+    /**
+     * Actualiza la información de un espacio de trabajo (solo para admins/owners).
+     * @param {Object} request - Objeto de petición.
+     * @param {Object} response - Objeto de respuesta.
+     * @param {Function} next - Función next.
+     */
     async update(request, response, next) {
         const workspace_id = request.params.workspace_id || request.body.workspace_id
         const { title, description } = request.body
@@ -117,6 +155,13 @@ class WorkspaceController {
         }
     }
 
+    /**
+     * Procesa la respuesta de un usuario a una invitación (Aceptar/Rechazar).
+     * @param {Object} req - Objeto de petición con token en query.
+     * @param {Object} res - Objeto de respuesta (envía HTML).
+     * @param {Function} next - Función next.
+     */
+
     async respondToInvitation(req, res, next) {
         const { token } = req.query
         try {
@@ -136,6 +181,12 @@ class WorkspaceController {
         }
     }
 
+    /**
+     * Archiva un espacio de trabajo (cambia su estado a inactivo).
+     * @param {Object} req - Objeto de petición con workspace_id en params.
+     * @param {Object} res - Objeto de respuesta.
+     * @param {Function} next - Función next.
+     */
     async delete(req, res, next) {
         const { workspace_id } = req.params 
         try {
@@ -150,6 +201,12 @@ class WorkspaceController {
         }
     }
 
+    /**
+     * Restaura un espacio de trabajo archivado (vuelve a activo).
+     * @param {Object} req - Objeto de petición con workspace_id en params.
+     * @param {Object} res - Objeto de respuesta.
+     * @param {Function} next - Función next.
+     */
     async restore(req, res, next) {
         const { workspace_id } = req.params 
         try {
