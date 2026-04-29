@@ -120,6 +120,20 @@ src/
 
 ## 💾 Modelos de Datos
 
+### Arquitectura de Datos
+El sistema utiliza una estructura relacional sobre MongoDB para gestionar la jerarquía de espacios, canales y mensajes:
+
+```mermaid
+erDiagram
+    USER ||--o{ WORKSPACE_MEMBER : "es miembro"
+    WORKSPACE ||--o{ WORKSPACE_MEMBER : "contiene"
+    WORKSPACE ||--o{ CHANNEL : "contiene"
+    CHANNEL ||--o{ CHANNEL_MESSAGE : "contiene"
+    WORKSPACE_MEMBER ||--o{ CHANNEL_MESSAGE : "envía"
+    WORKSPACE_MEMBER ||--o{ DIRECT_MESSAGE : "envía/recibe"
+    WORKSPACE ||--o{ DIRECT_MESSAGE : "agrupa"
+```
+
 ### User (Usuario)
 | Campo | Tipo | Requerido | Descripción |
 | :--- | :--- | :--- | :--- |
@@ -127,14 +141,55 @@ src/
 | `email` | String | Sí | Correo electrónico (único). |
 | `password` | String | Sí | Contraseña hasheada. |
 | `image` | String | No | URL de la foto de perfil (Cloudinary). |
+| `email_verified` | Boolean | Sí | Indica si el correo fue verificado. |
+| `created_at` | Date | Sí | Fecha de registro. |
 
 ### Workspace (Espacio de Trabajo)
 | Campo | Tipo | Requerido | Descripción |
 | :--- | :--- | :--- | :--- |
 | `title` | String | Sí | Título del espacio. |
-| `description`| String | Sí | Descripción corta del propósito. |
+| `description`| String | No | Descripción corta del propósito. |
 | `url_image` | String | No | Imagen representativa. |
 | `active` | Boolean | Sí | Estado del espacio (borrado lógico). |
+| `created_at` | Date | Sí | Fecha de creación. |
+
+### WorkspaceMember (Miembro de Espacio)
+| Campo | Tipo | Requerido | Descripción |
+| :--- | :--- | :--- | :--- |
+| `fk_id_user` | ObjectId | Sí | Referencia al usuario (`User`). |
+| `fk_id_workspace` | ObjectId | Sí | Referencia al espacio de trabajo (`Workspace`). |
+| `role` | String | Sí | Rol en el espacio (ADMIN, OWNER, USER). |
+| `acceptInvitation` | String | Sí | Estado de la invitación (PENDING, ACCEPTED, REJECTED). |
+| `created_at` | Date | Sí | Fecha de unión o invitación. |
+
+### Channel (Canal)
+| Campo | Tipo | Requerido | Descripción |
+| :--- | :--- | :--- | :--- |
+| `fk_id_workspace` | ObjectId | Sí | Referencia al espacio al que pertenece. |
+| `name` | String | Sí | Nombre del canal (único por workspace). |
+| `description` | String | No | Propósito o tema del canal. |
+| `is_active` | Boolean | Sí | Estado del canal (borrado lógico). |
+| `created_at` | Date | Sí | Fecha de creación. |
+
+### ChannelMessage (Mensaje de Canal)
+| Campo | Tipo | Requerido | Descripción |
+| :--- | :--- | :--- | :--- |
+| `fk_id_channel` | ObjectId | Sí | Canal donde se envió el mensaje. |
+| `fk_id_member` | ObjectId | Sí | Miembro que envió el mensaje. |
+| `content` | String | Sí | Contenido del mensaje (texto). |
+| `status` | String | Sí | Estado (ENVIADO, ENTREGADO, LEIDO). |
+| `created_at` | Date | Sí | Fecha de envío. |
+| `deleted_at` | Date | No | Fecha de eliminación (soft delete). |
+
+### DirectMessage (Mensaje Directo)
+| Campo | Tipo | Requerido | Descripción |
+| :--- | :--- | :--- | :--- |
+| `fk_id_workspace` | ObjectId | Sí | Espacio donde ocurre la conversación. |
+| `fk_id_sender` | ObjectId | Sí | Miembro remitente. |
+| `fk_id_receiver` | ObjectId | Sí | Miembro destinatario. |
+| `content` | String | Sí | Contenido del mensaje (texto). |
+| `status` | String | Sí | Estado (ENVIADO, ENTREGADO, LEIDO). |
+| `created_at` | Date | Sí | Fecha de envío. |
 
 ---
 
