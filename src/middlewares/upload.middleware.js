@@ -2,12 +2,20 @@ import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../config/cloudinary.config.js';
 
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Tipo de archivo no soportado. Solo se permiten imágenes (jpg, png, webp).'), false);
+    }
+};
+
 /**
- * Almacenamiento en Cloudinary.
- * Las imágenes se suben directamente a la nube — no se escriben en disco local.
- * Esto es compatible con entornos serverless como Vercel.
+ * Multer para fotos de perfil de usuario.
+ * Sube a Cloudinary en la carpeta 'conecta/profile-pictures'.
  */
-const storage = new CloudinaryStorage({
+const profileStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'conecta/profile-pictures',
@@ -19,21 +27,32 @@ const storage = new CloudinaryStorage({
     }
 });
 
-const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error('Tipo de archivo no soportado. Solo se permiten imágenes (jpg, png, webp).'), false);
-    }
-};
-
 const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB
-    },
-    fileFilter: fileFilter
+    storage: profileStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter
+});
+
+/**
+ * Multer para imágenes de workspace.
+ * Sube a Cloudinary en la carpeta 'conecta/workspace-images'.
+ */
+const workspaceStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'conecta/workspace-images',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+        transformation: [
+            { width: 512, height: 512, crop: 'fill' },
+            { quality: 'auto', fetch_format: 'auto' }
+        ]
+    }
+});
+
+export const uploadWorkspaceImage = multer({
+    storage: workspaceStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter
 });
 
 export default upload;

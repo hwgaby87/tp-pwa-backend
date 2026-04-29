@@ -5,6 +5,7 @@ import verifyWorkspaceMember from '../middlewares/verify-member-workspace.middle
 import verifyRole from '../middlewares/verify-role.middleware.js'
 import handleValidationErrors from '../middlewares/handle-validation.middleware.js'
 import { validateWorkspaceCreate, validateWorkspaceUpdate, validateWorkspaceDelete } from '../middlewares/validators/workspace.validator.js'
+import { uploadWorkspaceImage } from '../middlewares/upload.middleware.js'
 import channelRouter from './channel.route.js'
 import memberWorkspaceRouter from './member-workspace.route.js'
 import directMessageRouter from './direct-message.route.js'
@@ -71,6 +72,21 @@ workspaceRouter.post(
     verifyWorkspaceMember,
     verifyRole('owner'),
     workspaceController.restore
+)
+
+workspaceRouter.post(
+    '/:workspace_id/image',
+    verifyWorkspaceMember,
+    verifyRole('admin'),
+    uploadWorkspaceImage.single('image'),
+    workspaceController.updateWorkspaceImage
+)
+
+workspaceRouter.delete(
+    '/:workspace_id/image',
+    verifyWorkspaceMember,
+    verifyRole('admin'),
+    workspaceController.deleteWorkspaceImage
 )
 
 workspaceRouter.use(

@@ -99,6 +99,25 @@ class WorkspaceService {
             throw new ServerError("Error al restaurar el espacio de trabajo", 500);
         }
     }
+
+    async updateImage(workspace_id, url_image) {
+        if (!workspace_id) {
+            throw new ServerError("El ID del espacio de trabajo es obligatorio", 400);
+        }
+        if (!url_image) {
+            throw new ServerError("La URL de la imagen es obligatoria", 400);
+        }
+
+        try {
+            const updatedWorkspace = await workspaceRepository.updateById(workspace_id, { url_image });
+            if (!updatedWorkspace) {
+                throw new ServerError("El espacio de trabajo no existe", 404);
+            }
+            return updatedWorkspace;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 const workspaceService = new WorkspaceService()
 export default workspaceService
