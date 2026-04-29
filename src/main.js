@@ -32,12 +32,16 @@ const allowedOrigins = [
     'http://localhost:3000'
 ];
 
-// Agregar orígenes desde variables de entorno si existen
+// Agregar orígenes desde variables de entorno si existen (limpiando espacios y barras finales)
 if (process.env.URL_FRONTEND) {
-    process.env.URL_FRONTEND.split(',').forEach(origin => allowedOrigins.push(origin.trim()));
+    process.env.URL_FRONTEND.split(',').forEach(origin => {
+        allowedOrigins.push(origin.trim().replace(/\/$/, ''));
+    });
 }
 if (process.env.CORS_ORIGIN) {
-    process.env.CORS_ORIGIN.split(',').forEach(origin => allowedOrigins.push(origin.trim()));
+    process.env.CORS_ORIGIN.split(',').forEach(origin => {
+        allowedOrigins.push(origin.trim().replace(/\/$/, ''));
+    });
 }
 
 app.use(cors({
