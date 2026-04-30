@@ -1,0 +1,1648 @@
+{
+  "info": {
+    "_postman_id": "a1811558-f764-4bdb-a88f-4b9e9063d89d",
+    "name": "tp-pwa-backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53013155",
+    "_collection_link": "https://go.postman.co/collection/53013155-a1811558-f764-4bdb-a88f-4b9e9063d89d?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Registro usuario",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"integrar\",\r\n    \"email\": \"integrarcomputacion@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/auth/register",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login usuario",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "pm.environment.set(\"token\", response.data.auth_token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"hwgaby.dev@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/auth/login",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verifica email",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/auth/verify-email?verify_email_token={{token}}",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "verify-email"
+              ],
+              "query": [
+                {
+                  "key": "verify_email_token",
+                  "value": "{{token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Envia correo de recuperación",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"integrarcomputacion@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/auth/reset-password-request/",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "reset-password-request",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reestablecer contraseña",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"integrarcomputacion@gmail.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/auth/reset-password/?token",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "reset-password",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": null,
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/health",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check Copy",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/health",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "workspaces",
+      "item": [
+        {
+          "name": "Lista espacios activos del usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Lista espacios archivados",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/archived",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                "archived"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle de un espacio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualiza datos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Nuevo espacio\",\r\n    \"description\": \"Nuevo espacio editado\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archiva espacios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Nuevo espacio\",\r\n    \"description\": \"Nuevo espacio editado\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crea un nuevo espacio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Espacio 1\",\r\n    \"description\": \"Workspace 1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restaura un espacio de trabajo",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Espacio 1\",\r\n    \"description\": \"Workspace 1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/restore",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "restore"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "workspace-members",
+      "item": [
+        {
+          "name": "Lista los miembros del espacio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/members",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "members"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detalle de un miembro específico",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/members/:idMember",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "members",
+                ":idMember"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idMember",
+                  "value": "69f29d4f56555cd02d71d5da"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualiza rol de un miembro",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"role\": \"admin\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/members/:idMember",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "members",
+                ":idMember"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idMember",
+                  "value": "69f29d4f56555cd02d71d5da"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Elimina a un miembro del espacio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"role\": \"admin\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/members/:idMember",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "members",
+                ":idMember"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idMember",
+                  "value": "69f29d4f56555cd02d71d5da"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invita a un miembro",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": hwgaby87@gmail.com,\r\n    \"role\": \"user\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/members",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "members"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "channels",
+      "item": [
+        {
+          "name": "Lista los canales del espacio",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crea un canal",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"general\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualiza canal",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"nuevo nombre\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:channelId",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":channelId"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "channelId",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restaura canal eliminado",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:channelId",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":channelId"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "channelId",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Elimina canal",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:channelId",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":channelId"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "channelId",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Lista los canales eliminados",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/deleted",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                "deleted"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "channel-messages",
+      "item": [
+        {
+          "name": "Obtiene historial de mensajes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:channelId/messages",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":channelId",
+                "messages"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "channelId",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Envía nuevo mensaje",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:channelId/messages",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":channelId",
+                "messages"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "channelId",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marca mensaje leído",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:idChannel/messages/:idMessage/read",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":idChannel",
+                "messages",
+                ":idMessage",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idChannel",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                },
+                {
+                  "key": "idMessage",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marca mensaje entregado",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:idChannel/messages/:idMessage/received",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":idChannel",
+                "messages",
+                ":idMessage",
+                "received"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idChannel",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                },
+                {
+                  "key": "idMessage",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Elimina un mensaje",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/channels/:idChannel/messages/:idMessage",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "channels",
+                ":idChannel",
+                "messages",
+                ":idMessage"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idChannel",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                },
+                {
+                  "key": "idMessage",
+                  "value": "69f2a1339c3b7e66ef28fb3a"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "direct-messages",
+      "item": [
+        {
+          "name": "Obtiene chat con otro miembro",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/direct-messages/:other_id",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "direct-messages",
+                ":other_id"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "other_id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Envía un mensaje directo",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/direct-messages/:receiver_id",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "direct-messages",
+                ":receiver_id"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "receiver_id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marca mensaje directo como leído",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/direct-messages/:idMessages/read",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "direct-messages",
+                ":idMessages",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idMessages",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marca mensaje directo como recibido",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/direct-messages/:idMessages/received",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "direct-messages",
+                ":idMessages",
+                "received"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idMessages",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Elimina un mensaje directo",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"Hola\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/workspaces/:idWorkspace/direct-messages/:idMessage",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "workspaces",
+                ":idWorkspace",
+                "direct-messages",
+                ":idMessage"
+              ],
+              "variable": [
+                {
+                  "key": "idWorkspace",
+                  "value": "69f29d4f56555cd02d71d5d9"
+                },
+                {
+                  "key": "idMessage",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "Lista usuarios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/users",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualiza propio perfil",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Nuevo nombre\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE-URL}}/api/users",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtiene perfil del usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/users/:idUser",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":idUser"
+              ],
+              "variable": [
+                {
+                  "key": "idUser",
+                  "value": "69f28ff7ffa314436d8d18d0"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Elimina un usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{BASE-URL}}/api/users/:idUser",
+              "host": [
+                "{{BASE-URL}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":idUser"
+              ],
+              "variable": [
+                {
+                  "key": "idUser",
+                  "value": "69f28ff7ffa314436d8d18d0"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
